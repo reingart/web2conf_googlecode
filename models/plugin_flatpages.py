@@ -43,7 +43,7 @@ def plugin_flatpage():
         # search flatpage according to the current request
         query = db.plugin_flatpage.controller==request.controller
         query &= db.plugin_flatpage.function==request.function
-        query &= db.plugin_flatpage.arg==(request.args and request.args[0])
+        #query &= db.plugin_flatpage.arg==(request.args and request.args[0])
         if 'id' in request.vars:
             # request an specific version
             query &= db.plugin_flatpage.id==request.vars['id']
@@ -60,7 +60,7 @@ def plugin_flatpage():
             body = flatpage.body
         else:
             #TODO: define a "create page" message for not-found flatpages
-            response.flash = T("Page Not Found!")
+            response.flash = T("Page Not Found: %s") % db._lastsql
             format = "WIKI"
             view = FLATPAGE_VIEW
     elif request.vars.action and request.vars.action=='history':

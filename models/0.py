@@ -33,15 +33,18 @@ else:
     DBURI='sqlite://production.db'
     DBPOOLS=0
 
-response.title='web2conf'
-response.subtitle='conference management system'
-response.footer='you@somewhere.com'
-response.keywords='conference, web2py'
-response.description='made with web2py'
+response.title='UbuCon Argentina 2010'
+response.subtitle='Buenos Aires - 19 y 20 de Noviembre de 2010'
+response.footer="""Primeras conferencias en Español de Ubuntu en Argentina (organizado por <a href="http://www.ubuntu-ar.org/">UbuntuAr</a>). <br/>
+Más Información: <a href="https://wiki.ubuntu.com/ArgentinaTeam/UbuCon2010">ArgentinaTeam</a>&nbsp;
+<a href="https://lists.ubuntu.com/ubuntu-ar">Ubuntu User Group Argentina <ubuntu-ar@lists.ubuntu.com></a>"""
+response.keywords='ubuntu, software libre, buenos aires, argentina'
+response.description='Hecho con web2py'
+
 
 
 # GOOGLEMAP_KEY set in 0_private.py - here just to ensure definition
-GOOGLEMAP_KEY=''
+GOOGLEMAP_KEY='ABQIAAAANoGcCJcC-46KzN8dgwAVFxQM2onOJ6gcAGXVGT4swjtfsK1_mxRQAFcA_jfbaz70v91ye2tVdv8ftA'
 
 # The following GOOGLE items set in 0_private.py - here to ensure defaults:
 GOOGLE_MERCHANT_ID=''
@@ -101,7 +104,7 @@ ACTIVITY_TYPES=('talk','keynote','panel','plenary','tutorial','summit','open-spa
 ACTIVITY_CATEGORIES=('py3k','gui','web','herramientas','lenguaje')
 ACTIVITY_LEVELS=("Beginner","Intermediate","Advanced")
 
-SPONSOR_LEVELS=("Organizer",)
+SPONSOR_LEVELS=("Organizer", "Main Sponsor", "Sponsor")
 
 # verify by email, unless running a developer test:
 EMAIL_VERIFICATION= True #not DEV_TEST
@@ -153,8 +156,7 @@ PASSWORD_RETRIEVE_BODY=T("Your new password is %(password)s")
 INVOICE_HEADER = "This is a Conference Invoice!!!"
 
 CONFERENCE_URL=None
-CONFERENCE_COORDS=-20.2597103,-61.4510078
-#-31.2597103,-61.4510078
+CONFERENCE_COORDS=-34.59448,-58.41274
 
 
 

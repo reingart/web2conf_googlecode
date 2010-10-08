@@ -48,7 +48,9 @@ $('#auth_user_tutorials').multiSelect({selectAll: false});
 </div>
 <div align="center">
 <div id="menu">
+  <div id="menu-container"> 
   {{=MENU(response.menu, _class = 'sf-menu')}}
+  </div> 
 </div>
 </div>
 <div id="page">
@@ -95,7 +97,7 @@ except: pass
       <li>
          <h2>{{=T(sponsor_level)}}</h2>
          <ul>   
-         {{for sponsor in response.sponsors[sponsor_level]: }}
+         {{for sponsor in response.sponsors.get(sponsor_level, []): }}
             <li>
               <p>{{=A(IMG(_alt=sponsor.alt,_src=URL(r=request, c='default', f='fast_download', args=sponsor.logo),_border='0'),_href=sponsor.url,_title='%s (%s)' % (sponsor.alt, T(sponsor_level)))}}</p>
             </li>
@@ -109,10 +111,11 @@ except: pass
   <div style="clear: both;"> </div>
   </div>
   <div >  
-  <div align="center" class="frame1"><h2>{{=T('About')}} {{=response.title}}</h2>{{=XML(response.footer)}}</div>
+  <div align="center" class="frame1"></div>
   </div>  
   <div id="footer">
-    <h2 align="center"><a href="http://www.web2py.com.ar"><img alt="web2py" src="{{=URL(r=request,c='static',f='media/web2py_logor.png')}}" border="0" /></a></h2>
+    <h2>{{=T('About')}} {{=response.title}}</h2>{{=XML(response.footer)}}
+    <p><a href="http://www.web2py.com.ar" alt="Powered by web2py"><img alt="web2py" src="{{=URL(r=request,c='static',f='media/web2py_logor.png')}}" border="0" /></a></p>
   </div>
 </body>
 </html>

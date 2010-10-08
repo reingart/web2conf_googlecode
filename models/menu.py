@@ -13,6 +13,7 @@ else:
         [T('Venue'),True,URL(r=request,c='conference',f='venue')],
         [T('Schedule'),True,URL(r=request,c='conference',f='schedule')],
         [T('Lightning Talks'),True,URL(r=request,c='conference',f='lightning')],
+        [T('Open Spaces'),True,URL(r=request,c='conference',f='openspaces')],
         [T('Talk Proposals'),True,URL(r=request,c='conference',f='proposals')],
         [T('Staff'),True,URL(r=request,c='conference',f='staff')],
     ]
@@ -80,5 +81,5 @@ for sponsor in sponsors:
     response.sponsors.setdefault(sponsor.level, []).append(sponsor)
 
 #randomize sponsors...
-##import random
-##random.shuffle(response.sponsors[str(SPONSOR_LEVELS[1])])
+#import random
+#random.shuffle(response.sponsors[str(SPONSOR_LEVELS[1])])
