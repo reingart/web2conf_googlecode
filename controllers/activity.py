@@ -23,6 +23,14 @@ def accepted():
 
 @auth.requires_login()
 def propose():
+    if request.args:
+        duration = ACTIVITY_DURATION.get(request.args[0])
+        if duration:
+            db.activity.duration.default = duration
+            db.activity.type.default = request.args[0]
+            db.activity.duration.writable = False
+            db.activity.type.writable = False
+
     insert_author = lambda form: db.author.insert(user_id=auth.user_id,activity_id=form.vars.id)
     return dict(form=crud.create(db.activity, 
                                  next='display/[id]', 

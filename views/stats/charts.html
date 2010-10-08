@@ -9,7 +9,7 @@
 {{=chart_state}}
 <br /><br />
 
-{{if session.manager:}}
+{{if auth.has_membership(role='manager'):}}
 <h2>{{=T('Registration date')}}</h2>
 {{=chart_registration_date}}
 <br /><br />

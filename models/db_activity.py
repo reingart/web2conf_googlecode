@@ -97,7 +97,7 @@ db.define_table('author',
     migrate=migrate)
     
 def user_is_author(activity_id=None):
-    if not auth.is_logged_in() or (not request.args and activity_id is None):
+    if not auth.is_logged_in() or (not request.args and activity_id is None) or not request.args[0].isdigit():
         return False
     if activity_id is None:
         activity_id = request.args[0]
@@ -105,7 +105,7 @@ def user_is_author(activity_id=None):
         return True
 
 def activity_is_accepted():
-    if not request.args:
+    if not request.args or not request.args[0].isdigit():
         return False
     if db((db.activity.id==request.args[0])&(db.activity.status=='accepted')).count():
         return True

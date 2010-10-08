@@ -4,6 +4,7 @@
 
 @auth.requires_membership(role='manager')
 def _crud():
+    if request.args and request.args[0]=='read': request.args[0]='update'
     crud.settings.controller = 'manage'
     return dict(form=crud())
 
@@ -202,4 +203,3 @@ def cancel_payment2():
     except Exception:
          session.flash=T('Invalid operation')
          redirect(URL(r=request,f='impersonate',args=request.args[0]))
-

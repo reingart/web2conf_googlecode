@@ -53,6 +53,7 @@ db.define_table('auth_user',
     db.Field('amount_paid','double',default=0.0,readable=False,writable=False),
     db.Field('amount_due','double',default=0.0,readable=False,writable=False),
     db.Field('resume','text',label=T('Resume (Bio)'),readable=True,writable=True),
+    db.Field('photo','upload',label=T('Photo'),readable=True,writable=True),
     db.Field('cv','upload',label=T('CV'),readable=True,writable=True),
     db.Field('speaker','boolean',default=False,readable=False,writable=False),
     db.Field('session_chair','boolean',default=False,readable=False,writable=False),
@@ -81,6 +82,7 @@ db.auth_user.company_name.comment=T('corporation, university, user group, etc.')
 db.auth_user.include_in_delegate_listing.comment=XML(A(str(T('If checked, your Name, Company and Location will be displayed publicly')) + '[1]',_href='#footnote1'))
 db.auth_user.resume.comment=T('Short Biography and references (for authors)')
 db.auth_user.resume.widget=lambda field,value:SQLFORM.widgets.text.widget(field,value,_cols="35",_rows="4",_class="string")
+db.auth_user.photo.comment=T('Your picture (for authors)')
 
 
 db.auth_user.cv.comment=XML(A('[3]',_href='#footnote3'))

@@ -101,8 +101,10 @@ COST_FIRST_TUTORIAL=120.0
 COST_SECOND_TUTORIAL=80.0
 
 ACTIVITY_TYPES=('talk','keynote','panel','plenary','tutorial','summit','open-space','social','break') 
-ACTIVITY_CATEGORIES=('py3k','gui','web','herramientas','lenguaje')
+ACTIVITY_CATEGORIES=('desktop','server','netbook','gui','web','herramientas','comunidad','paquetes','instalación','administración')
 ACTIVITY_LEVELS=("Beginner","Intermediate","Advanced")
+ACTIVITY_DURATION={'talk': 45, 'tutorial': 120}
+
 
 SPONSOR_LEVELS=("Organizer", "Main Sponsor", "Sponsor")
 

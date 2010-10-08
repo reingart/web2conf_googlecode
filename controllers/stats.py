@@ -19,6 +19,13 @@ def attendees():
                   orderby=db.auth_user.first_name|db.auth_user.last_name)
     return dict(rows=rows)
 
+#@cache(request.env.path_info,time_expire=60,cache_model=cache.ram)
+def speakers():
+    s=db(db.auth_user.speaker==True)
+    rows=s.select(db.auth_user.ALL,
+                  orderby=db.auth_user.first_name|db.auth_user.last_name)
+    return dict(rows=rows)
+
 @cache(request.env.path_info,time_expire=60,cache_model=cache.ram)
 def charts():    
     cn=[]

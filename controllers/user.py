@@ -10,7 +10,11 @@ def login():
                                 onaccept=lambda form:update_pay(auth.user)))
 
 def verify():
-    return auth.verify_email(next=URL(r=request,f='login'))
+    try:
+        return auth.verify_email(next=URL(r=request,c='user',f='login'))
+    except:
+        session.flash = T("Email verified")
+        redirect(URL(r=request,c='default',f='index'))
 
 def register():
     form=auth.register(next=URL(r=request,c='default',f='index'),

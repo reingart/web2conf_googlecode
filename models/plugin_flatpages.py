@@ -60,7 +60,7 @@ def plugin_flatpage():
             body = flatpage.body
         else:
             #TODO: define a "create page" message for not-found flatpages
-            response.flash = T("Page Not Found: %s") % db._lastsql
+            response.flash = T("Page Not Found")
             format = "WIKI"
             view = FLATPAGE_VIEW
     elif request.vars.action and request.vars.action=='history':
