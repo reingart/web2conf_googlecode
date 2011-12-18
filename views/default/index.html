@@ -1,0 +1,29 @@
+{{extend 'layout.html'}}
+{{if form and format=='HTML':}}
+<script type="text/javascript" src="{{=URL(request.application,'static/plugin_flatpages','jquery.wysiwyg.js')}}"></script>
+<link rel="stylesheet" media="screen,projection" type="text/css" href="{{=URL(request.application,'static/plugin_flatpages','jquery.wysiwyg.css')}}" />
+<script type="text/javascript">
+$(function()
+  {
+      $('#wysiwyg').wysiwyg();
+  });
+</script>
+{{pass}}
+<div class="frame">
+{{=body}}
+</div>
+{{if form:}}
+{{=form}}
+{{pass}}
+
+<p/>
+
+{{if True or TWITTER_HASH:}}    
+<div class="frame">
+  <h3><img src={{=URL(c="static",f="/img/twitter.png")}} ald="twitter"/> {{=T("%s Recent Tweets"%TWITTER_HASH)}}</h3>
+  <div id="tweets">{{=T('loading...')}}</div>
+  <script>
+    jQuery(document).ready(function(){jQuery('#tweets').load('{{=URL('twitter')}}')});
+  </script>
+</div>
+{{pass}}
