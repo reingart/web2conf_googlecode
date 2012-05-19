@@ -11,19 +11,19 @@ H1, H2, H3
     /* margin: 0;*/
     font-family: Helvetica, sans-serif;
     /*padding: 10px 0; */
-    color: #787878;
+    color: #d24b03;
 }
 H1
 {
-    font-size: 2.2em;
+    font-size: 1.6em;
 }
 H2
 {
-    font-size: 1.8em;
+    font-size: 1.3em;
 }
 H3
 {
-    font-size: 1.4em;
+    font-size: 1.0em;
 }
 P, UL, OL
 {
@@ -54,12 +54,12 @@ A:hover
 }
 #header
 {
+
     width: 100%;
     height: 86px;
     margin: 0 auto;
     padding: 5px 0 5px 10px;
-    background-image: url(img/mastbg3.gif);
-    background-color: #369;
+    background-color:  #008bb9;
     background-repeat-x: initial;
     background-repeat-y: initial;
     background-attachment: initial;
@@ -123,7 +123,7 @@ A:hover
 #logo IMG
 {
     height: 78px;
-    width: 60px;
+    width: 88px;
     padding: 4px 12px;
     float: left;
     margin: 0;
@@ -209,7 +209,8 @@ A:hover
     width: 100%;
     height: 30px;
     margin: 0 auto 0 auto;
-    background-color: #000033;
+    background-color: #666;
+    background: #B7B7B7 url("/img/nav_fill.png") top left repeat-x;
     text-align: center;
 }
 #menu-container
@@ -347,7 +348,7 @@ TABLE TR TD
     height: 60px;
     margin: 0;
     padding: 0;
-    background: #90BF4D url(media/img02.jpg) left top;
+    background: #008bb9 url("/img/hdr_fill.png") repeat-x;
     font-size: 20px;
     font-family: Helvetica, sans-serif;
     color: #416110;
@@ -1247,4 +1248,19 @@ a.btn-sponsor span {
 
 a.btn-sponsor:hover {
   background-position: 0 -51px;
+}
+
+
+#pgFrontFeature {
+  position: relative;
+  background: #F5F5F5 url(img/feature_elephant.png) right bottom no-repeat;
+  /* Also see pgFrontFeatureContent for image size */
+  padding: 2px 140px 2px 21px;
+  margin-bottom: 1em;
+  font-size: 1.0em;
+  border: solid 0px #848484;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 10px;
 }
