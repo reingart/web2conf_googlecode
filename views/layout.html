@@ -29,7 +29,7 @@ $('#auth_user_tutorials').multiSelect({selectAll: false});
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-31246695-1']);
+  _gaq.push(['_setAccount', 'UA-31898785-1']);
   _gaq.push(['_trackPageview']);
 
   (function() {
@@ -50,6 +50,16 @@ $('#auth_user_tutorials').multiSelect({selectAll: false});
   </div>
   <div id="account-bar">
    {{try:}}{{=auth.navbar(action=URL(c="user", f="index"))}}{{except:pass}}
+        <g:plusone size="small" annotation="none"></g:plusone>
+        <script type="text/javascript">
+          window.___gcfg = {lang: 'es-419'};
+        
+          (function() {
+            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            po.src = 'https://apis.google.com/js/plusone.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+          })();
+        </script>
       <div id="search">
         <form method="get" action="http://www.google.com/search">
         <a href="?lang=es">Español</a> / <a href="?lang=en">English</a>

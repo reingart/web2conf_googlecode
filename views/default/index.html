@@ -18,15 +18,17 @@ $(function()
   {{=form}}
 {{pass}}
 
+{{if True or PLANET_REGEX is not None:}}
 {{ =HR() }}
 <div>
-  {{ =LOAD("default", "planet.load") }}
+{{ =LOAD("default", "planet.load") }}
 </div>
+{{pass}}
 {{ =HR() }}
 {{if True or TWITTER_HASH:}}
   <div>
     <h3><img src={{=URL(c="static",f="/img/twitter.png")}} alt="twitter"/> {{=T("%s Recent Tweets"%TWITTER_HASH)}} &nbsp;
-    <a href="https://twitter.com/pyconar" class="twitter-follow-button" data-show-count="false" data-lang="es">Seguir a @pyconar</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></h3>
+    <a href="https://twitter.com/pgsqlar" class="twitter-follow-button" data-show-count="false" data-lang="es">Seguir a @pyconar</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></h3>
       <div class="tweets" class="tweets">
         {{ =LOAD("default", "twitter.load") }}
       </div>

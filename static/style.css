@@ -15,11 +15,11 @@ H1, H2, H3
 }
 H1
 {
-    font-size: 1.6em;
+    font-size: 1.4em;
 }
 H2
 {
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 H3
 {
@@ -293,6 +293,15 @@ A:hover
     padding-left: 50pt;
     padding-right: 50pt;
 }
+.frame img  {
+    background: white;
+    border: none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+
 /*Sidebar*/
 #sidebar
 {
@@ -1194,13 +1203,13 @@ margin-left: -20px;
 }
 
 #tweets ul li {
-  background: #d3e5ff;
+  background: white;
   list-style: none;
   -moz-border-radius: 0.5em;
   border-radius: 0.5em;
   padding: 0.5em;
   margin: 0.5em 0;
-  border: 1px solid #aaa;
+  border: 1px solid #C5C5C5;
 }
 
 #tweets .entry-date {
