@@ -43,8 +43,5 @@ if NAVBAR:
     ]
     response.menu.append([T('Stats'),False,URL(r=request,c='stats',f='index'),submenu_info])
 
-    if auth.user:
-        response.menu.append([T('Profile'),False,URL(r=request,c='user',f='profile')])
-        response.menu.append([T('Logout'),False,URL(r=request,c='user',f='logout')])
-    else:
-        response.menu.append([T('Login'),False,URL(r=request,c='user',f='login')])
+    if not auth.user:
+        response.menu.insert(1, [T('Register'),False,URL(r=request,c='user',f='register')])
