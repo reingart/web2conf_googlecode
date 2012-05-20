@@ -5,7 +5,6 @@
 <h1>{{=T('Accepted Activities')}}</h1>
 
 <p><b>Nota: </b>El listado de actividades es provisorio, próximamente será actualizado con las charlas plenarias, paneles y talleres</p>
-<p><i><b>¡Quedate conectado con PyConAr para más info y novedades!.</b></i></p>
 
 {{for activity_type in ACTIVITY_TYPES:}}
 {{rows_by_activity = [row for row in rows if row.activity.type.lower().strip()==activity_type]}}

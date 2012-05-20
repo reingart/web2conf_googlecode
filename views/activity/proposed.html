@@ -1,7 +1,11 @@
 {{extend 'layout.html'}}
 
 <div class="frame">
+
+{{=A(SPAN(XML(T("Submit a new <b>proposal</b>"))),_href=URL(r=request,c='activity',f='propose'), _class="btn-sponsor")}}</p>
+
 <h1>{{=T('Proposed Activities')}}</h1>
+
 
 {{for activity_type in ACTIVITY_TYPES:}}
 <h2>{{=T(activity_type)}}</h2>
