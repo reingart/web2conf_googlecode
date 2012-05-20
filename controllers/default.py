@@ -34,7 +34,7 @@ def twitter():
     try:
         if TWITTER_HASH:
             # tweets = urllib.urlopen('http://twitter.com/%s?format=json' % TWITTER_HASH).read()
-            tweets = urllib.urlopen("http://search.twitter.com/search.json?q=%%40%s" % TWITTER_HASH).read()
+            tweets = urllib.urlopen("http://search.twitter.com/search.json?q=%s" % TWITTER_HASH).read()
             data = sj.loads(tweets, encoding="utf-8")
             the_tweets = dict()
             
@@ -94,7 +94,10 @@ def get_planet_rss(arg):
     import gluon.contrib.feedparser as feedparser
 
     # filter for general (not categorized) feeds
-    regex =  re.compile('web2py',re.I)
+    if PLANET_REGEX:
+        regex =  re.compile(PLANET_REGEX, re.I)
+    else:
+        regex = None
 
     feeds = db(db.feed.id>0).select()
 
@@ -104,7 +107,7 @@ def get_planet_rss(arg):
         # fetch and parse feeds
         d = feedparser.parse(feed.url)
         for entry in d.entries:
-            if not feed.general or regex.search(entry.description):
+            if not feed.general or (regex and regex.search(entry.description)):
                 # extract entry attributes
                 entries.append({
                     'feed': {'author':feed.author,'link':feed.link, \

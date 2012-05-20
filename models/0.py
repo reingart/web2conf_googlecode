@@ -40,6 +40,7 @@ else:
     DBPOOLS=0
 
 TWITTER_HASH = "pyconar"
+PLANET_REGEX = None
 response.title=T('web2conf')
 response.subtitle=''
 response.footer=T("""Conference description<b>dates</b> city (organized by <a href="#">users group</a>). <br/>
