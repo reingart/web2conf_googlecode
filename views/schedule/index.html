@@ -1,0 +1,27 @@
+{{extend 'layout.html'}}
+{{tr_classes = ['odd', 'even']}}
+<div class="frame">
+
+<h2>{{=T('Timetable')}}</h2>
+
+<p>Para mayor información y detalle de las actividades y oradores, ver:
+<ul>
+<li>{{=A(T('Accepted Activities'),_href=URL(r=request,c='activity',f='accepted'))}}</li>
+<li>{{=A(T('Speakers'),_href=URL(r=request,c='activity',f='speakers'))}}</li>
+</ul>
+</p>
+
+{{=H3("tables")}}
+{{for name, schedule_table in schedule_tables.iteritems():}}
+  {{=H5(name)}}
+  {{=schedule_table}}
+{{pass}}
+
+<p style="text-align: center">
+{{=T('Level')}} (Orientativo): 
+{{for level in ACTIVITY_LEVELS:}}
+  <span>{{=levels[level]}} {{=T(level)}}&nbsp;&nbsp;</span>
+{{pass}}
+</p>
+<p><b>Importante:</b> eventualmente las fechas y horarios pueden cambiar sin previo aviso por cuestiones agenas a la organización del evento. Por favor, revise esta página frecuentemente.</p>
+</div>
