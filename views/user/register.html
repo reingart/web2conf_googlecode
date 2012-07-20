@@ -1,0 +1,27 @@
+{{extend 'layout.html'}}
+
+<script>
+$(document).ready(function(){
+$('TR TD:first').attr('width','150px');
+});
+</script>
+
+<div class="frame">
+<h1>{{=T('Registration Form')}}</h1>
+{{if TODAY_DATE<REGCLOSE_DATE:}}
+{{=form}}
+<p><b>Notas:</b></p>
+<p id="footnote1"><b>[1]</b> Esta información podrá ser provista a los auspiciantes (desmarcar "Incluir en Lista de Participantes" o "Contactos con Auspiciantes" si no desea que sus datos sean publicados y/o provistos a auspiciantes).
+Los campos son opcionales salvo que se indique lo contrario.</p>
+<p id="footnote2"><b>[2]</b> La entrada es libre y gratuita. Pagando un bono contribución (optativo) nos ayudas a hacer posible este evento y obtienes una remera, certificado y bolsa/carpeta con materiales/artículos promocionales.
+<p id="footnote2"><b>[3]</b> Si subes tu Curriculum Vitae, este será enviado a los sponsors para futuras búsquedas laborales.
+</p>
+{{else:}}
+<h3>El período de inscripción web finalizado el {{=REGCLOSE_DATE}}</h3>
+
+<p>Quienes no se registraron o no pudieron confirmar pueden igualmente acercarse, siempre y cuando nos sea posible, podemos registrarlos en el evento y permitirles acceder, pero tendran prioridad para entrar - dado los lugares limitados - aquellos que hayan confirmado.
+La inscripción y confirmación era obligatoria para evitar este tipo de inconvenientes.</p>
+
+<h3>¡Los eseperamos en el Evento!</h3>
+{{pass}}
+</div>
