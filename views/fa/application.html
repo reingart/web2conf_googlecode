@@ -1,0 +1,16 @@
+{{extend 'layout.html'}}
+
+<script>
+$(document).ready(function(){
+$('TR TD:first').attr('width','150px');
+});
+</script>
+
+<div class="frame">
+<h2>{{=T('Edit Your Financial Aid Application')}}</h2>
+<p>{{=T("In order to apply for financial aid, we need a bit of information from you, in the form below.")}}
+<br>{{=T("Each time you submit or update your application, it is emailed to you and the Financial Aid Administrator.")}}</p>
+<h3>{{=A(T("Please read these instructions BEFORE submitting your application."), _href=URL(f="index"))}}</h3>
+
+{{=form}}
+</div>
