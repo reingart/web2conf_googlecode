@@ -1,0 +1,11 @@
+{{extend 'layout.html'}}
+<ul class="control_panel">
+{{ for i, opt in enumerate(options): }}
+  {{ if i % 2 == 0:}}
+    {{ li_class = "even" }}
+  {{ else: }}
+    {{ li_class = "odd" }}
+  {{ pass }}
+  {{=LI(A(opt.name.replace("_", " "), _href=URL("manage", "option", args=["option", opt.id]), _class="option"), DIV(EM(opt.description), _class="description"), DIV(opt.value, _class="value"), _class=li_class)}}
+{{ pass }}
+</ul>

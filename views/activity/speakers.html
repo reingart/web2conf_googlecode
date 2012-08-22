@@ -1,0 +1,47 @@
+{{extend 'layout.html'}}
+<div class="frame">
+<h1>{{=T('Speakers')}}</h1>
+{{for author in sorted(authors, key=lambda x: x.last_name.upper() ):}}
+{{if author.id in activities_by_author or True:}}
+<h2 id="{{=author.id}}">{{="%s %s" % (author.first_name, author.last_name)}}<a class="headerlink" href="#{{=author.id}}" title="Permanent link">¶</a></h2>
+<div class="wiki">
+{{if author.photo:}}
+<div style="position: relative">
+{{=IMG(_alt=author.last_name, _src=URL(r=request,c='default',f='fast_download', args=author.photo),  _width="100px",_height="100px", _style="margin-left: 10px; margin-right: 10px; margin-top: 3px; margin-bottom: 10px; float: left; ")}}
+{{=IMG(_src=URL(c="static", f="img", args=[FLAGS.get(author.country)]), _alt=author.country, 
+       _style="position: absolute; top: 90px; left: 92px; z-index: 1;")}}
+</div>
+{{pass}}
+{{if author.personal_home_page:}}
+{{=T('Personal Home Page')}}: {{=A(author.personal_home_page,_href=author.personal_home_page)}}<br/>
+{{pass}}
+{{if author.company_name:}}
+{{=T("Company")}}: {{=A(author.company_name,_href=author.company_home_page)}}<br/>
+{{pass}}
+{{if author.twitter_username:}}
+{{=DIV(IMG(_src=URL(c='static', f="media/twitter22px.png"), _style='border: none; vertical-align:middle;'), " ", 
+   A("@%s" % author.twitter_username, _href="https://twitter.com/%s" % author.twitter_username, _style="text-decoration: none "))}}
+{{pass}}
+<br/>
+{{if author.resume:}}
+<div class="wiki">{{=MARKMIN(author.resume, sep="br")}}</div><br/>
+{{else:}}
+<br/>
+{{pass}}
+<div style="clear:both"><ul>
+<!-- {{=author.id}}  -->
+{{for activity in activities_by_author.get(author.id, []):}}
+<li>{{=A(activity.title, _href=URL(r=request,c='activity', f='accepted', anchor=activity.id ))}} ({{=T(activity.type)}})</li>
+{{pass}}
+</ul>
+</div> 
+<br/>
+</div>
+{{pass}}
+{{pass}}
+{{#=BEAUTIFY(activities_by_author)}}
+{{if len(authors)<10 and not request.args:}}
+
+<p>Proximamente más invitados y oradores...</p>
+{{pass}}
+</div>
