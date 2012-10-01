@@ -1,0 +1,19 @@
+syntax: glob
+*.pyc
+*.pyo
+*.bak
+*~
+*.orig
+*.backup
+.directory
+#*
+models/0_override.py
+models/0_private.py
+databases/*
+sessions/*
+errors/*
+cache/*
+private/*
+uploads/*
+static/slideshow/*
+static/docs/*
