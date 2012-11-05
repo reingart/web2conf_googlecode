@@ -10,10 +10,10 @@ def index():
     response.reg_count = cache.ram(request.env.path_info + ".reg_count", 
                                    lambda: db(db.auth_user).count(), 
                                    time_expire=60*5)
-    response.days_left = (CONFERENCE_DATE - TODAY_DATE).days
+    days = (CONFERENCE_DATE.date() - TODAY_DATE.date()).days
+    response.days_left = days if days > 0 else 0
     return response.render(plugin_flatpage()) 
-
-
+    
 @caching
 def about():
     return response.render(dict())
@@ -77,7 +77,7 @@ def twitter():
                                                time_expire=60*15)
             except:
                import os
-               # manually clean cache (TODO: check why it can get corrupt!)
+               # manually clean cache (just in case)
                path = os.path.join(request.folder,'cache')
                for f in os.listdir(path):
                     try:
