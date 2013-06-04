@@ -1,0 +1,27 @@
+{{extend 'layout.html'}}
+
+<div class="frame">
+<h2>{{=T('Pay')}}</h2>
+{{if payment_count:}}
+<p><b>{{=T("Warning")}}</b>: {{=A(T("You have %s payments generated, click here to see the status", payment_count), _href=URL("index"))}}</p>
+{{pass}}
+
+{{=form}}
+
+<h3>{{=T('Whats\'s included?')}}</h3>
+<ul>
+{{gratis = ""}}
+{{for attendee_type, text in attendee_types:}}
+  {{if attendee_type != "gratis":}}
+  <li><b>{{=T(attendee_type)}}</b>: {{=T(text)}}</li>
+  {{else:}}
+  {{gratis = text}}
+  {{pass}}
+{{pass}}
+</ul>
+{{if gratis:}}
+<p>{{=T("All registered attendees will receive free of charge:")}} {{=T(gratis)}}</p>
+{{pass}}
+<p>{{=T("For more information, please see")}} {{=A(T("Registration"), _href=URL(c="conference", f="registration"))}}</p>
+
+</div>
