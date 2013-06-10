@@ -49,7 +49,6 @@ if request.function in ('register', 'profile') and 'speaker' in request.args:
     db.auth_user.country.requires = IS_NOT_EMPTY(T("(required for speakers)"))
     db.auth_user.phone_number.requires = IS_NOT_EMPTY(T("(required for speakers)"))
 
-
 def index():
     # URL rewrite for backward compatibility (navbar)
     f = request.args and request.args[0] or 'profile'
@@ -58,7 +57,7 @@ def index():
         f = 'password'
     redirect(URL(f=f, args=args))
 
-def create_rpx_login_form(c="user", f="login", embed=False):
+def create_rpx_login_form(c="user", f="janrain", embed=False):
     if JANRAIN:
         from gluon.contrib.login_methods.rpx_account import RPXAccount
         return RPXAccount(request,
@@ -77,13 +76,20 @@ def create_rpx_login_form(c="user", f="login", embed=False):
 def login():
     from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 
-    alt_login_form, signals = create_rpx_login_form()
-            
-    if alt_login_form:
-        extended_login_form = ExtendedLoginForm(auth, alt_login_form, signals=signals)
-        auth.settings.login_form = extended_login_form
-    return dict(form=auth.login(#next=URL(r=request,c='user',f='profile'),
-                                ))
+    # create the social networks single-signon form:
+    alt_login_form, signals = create_rpx_login_form(embed=True)
+
+    # clean comments and create the basic login form:
+    db.auth_user.email.comment = ""
+    db.auth_user.password.comment = ""
+    login_form = auth.login()  #next=URL(r=request,c='user',f='profile'),
+    # customize form style
+    login_form['_class'] = "form-signin"
+    
+    #if alt_login_form:
+    #    extended_login_form = ExtendedLoginForm(auth, alt_login_form, signals=signals)
+    #    auth.settings.login_form = extended_login_form
+    return dict(form=login_form, alt_login_form=alt_login_form.login_form())
 
 def janrain():
     alt_login_form, signals = create_rpx_login_form()
@@ -96,6 +102,7 @@ def verify():
     return auth.verify_email(next=URL(r=request,f='login'))
 
 def register():
+        
     # request captcha only in the registration form:
     if RECAPTCHA_PUBLIC_KEY:
         auth.settings.captcha=Recaptcha(request, RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY)
@@ -104,7 +111,7 @@ def register():
     
     # don't show janrain if user is filling the form manually:
     if not request.vars:
-        alt_login_form, signals = create_rpx_login_form(f="janrain")
+        alt_login_form, signals = create_rpx_login_form(f="janrain", embed=True)
     else:
         alt_login_form = signals = None
         
@@ -116,10 +123,11 @@ def register():
     #auth.settings.login_form = self.auth
     form=auth.register(next=URL(r=request,c='default',f='index'),
                        onaccept=update_person)
-    #form = DIV(auth())
-    if alt_login_form:
-        form.components.append(alt_login_form.login_form())
-    return dict(form=form)
+
+    # add client-side validations
+    client_side_validate(form, db.auth_user)
+
+    return dict(form=form, alt_login_form=alt_login_form.login_form())
 
 def change_password():
     redirect(URL(f="password"))
@@ -146,6 +154,8 @@ def profile():
                      onaccept=update_person,
                      deletable=False,
                      next='profile')
+    # add client-side validations
+    client_side_validate(form, db.auth_user)
     return dict(form=form)
 
 
@@ -183,3 +193,7 @@ def join_reviewers():
     else:
         session.flash = T("Already in the Reviewer Group!")
     redirect(URL(c='activity', f='proposed'))
+
+
+def not_authorized():
+    return {}

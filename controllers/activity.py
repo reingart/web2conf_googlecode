@@ -53,7 +53,7 @@ def ratings():
 
 @auth.requires_login()
 def vote():
-    if get_option("ALLOW_VOTE") == False:
+    if ALLOW_VOTE == False:
         response.generic_patterns = ["*",]
         return dict(message=H3(T("Voting is disabled")))
 
@@ -206,10 +206,14 @@ def propose():
            form.errors.type = T('%s submission closed on %s') % (activity_type, deadline)
            
     validate = lambda form: db.author.insert(user_id=auth.user_id,activity_id=form.vars.id)
-    return dict(form=crud.create(db.activity, 
-                                 next='display/[id]', 
-                                 onvalidation=my_form_processing,
-                                 onaccept=[insert_author, email_author]))
+
+    form = crud.create(db.activity, next='display/[id]', # formstyle="bootstrap",
+                       onvalidation=my_form_processing,
+                       onaccept=[insert_author, email_author])
+    # add client-side validations
+    client_side_validate(form, db.activity)
+
+    return dict(form=form)
 
 @auth.requires(auth.has_membership(role='manager') or (user_is_author() and TODAY_DATE<PROPOSALS_DEADLINE_DATE))
 def update():
@@ -368,35 +372,35 @@ def email_author(form):
     if isinstance(user, unicode):
         user = user.encode('utf-8', 'replace')
     if request.function == "propose":
-        cc = [text.strip() for text in get_option("ON_PROPOSE_EMAIL", "").split(";") if "@" in text]
+        cc = [text.strip() for text in ON_PROPOSE_EMAIL.split(";") if "@" in text]
         for c in (form.vars.cc or '').split(";"):
             if (not c.strip() in cc) and ("@" in c):
                 cc.append(c)
         activity = db.activity[form.vars.id]
         tvars = dict(activity=activity.title, user=user, link=URL(r=request,f='display',args=activity.id, scheme=True, host=True))
-        text = T(get_option("PROPOSE_NOTIFY_TEXT", "Your activity proposal has been recorded. Thank you")) % tvars
-        subject = T(get_option("PROPOSE_NOTIFY_SUBJECT", "New activity proposal")) % tvars
+        text = PROPOSE_NOTIFY_TEXT % tvars
+        subject = PROPOSE_NOTIFY_SUBJECT % tvars
     elif request.function == "comment":
         activity = db.activity[request.args[0]]
         tvars = dict(activity=activity.title, user=user, link=URL(r=request,f='display',args=activity.id, scheme=True, host=True))        
         tvars["comment"] = form.vars.body
-        text = T(get_option("COMMENT_NOTIFY_TEXT", "Your activity received a comment by %(user)s.")) % tvars
-        subject = T(get_option("COMMENT_NOTIFY_SUBJECT", "Activity comment")) % tvars
+        text = COMMENT_NOTIFY_TEXT % tvars
+        subject = COMMENT_NOTIFY_SUBJECT % tvars
         to = activity.created_by.email
     elif request.function == "review":
         activity = db.activity[request.args[0]]
         tvars = dict(activity=activity.title, user=user, link=URL(r=request,f='display',args=activity.id, scheme=True, host=True))
         tvars["review"] = form.vars.body
         tvars["rating"] = form.vars.rating
-        text = T(get_option("REVIEW_NOTIFY_TEXT", "A review of your activity has been created or updated by %(user)s.")) % tvars
-        subject = T(get_option("REVIEW_NOTIFY_SUBJECT", "Activity review")) % tvars
+        text = REVIEW_NOTIFY_TEXT % tvars
+        subject = REVIEW_NOTIFY_SUBJECT % tvars
         to = activity.created_by.email
     elif request.function == "confirm":
         # confirm forms are None
         activity = db.activity[request.args[0]]
         tvars = dict(activity=activity.title, user=user, link=URL(r=request,f='display',args=activity.id, scheme=True, host=True))
-        text = T(get_option("CONFIRM_NOTIFY_TEXT", "Your activity %(activity)s has been confirmed")) % tvars
-        subject = T(get_option("CONFIRM_NOTIFY_SUBJECT", "Activity confirmed")) % tvars
+        text = CONFIRM_NOTIFY_TEXT % tvars
+        subject = CONFIRM_NOTIFY_SUBJECT % tvars
         to = activity.created_by.email
     if to is None:
         to = auth.user.email
@@ -405,28 +409,4 @@ def email_author(form):
         db.commit()   # just in case, save the changes to the db if email fails
         notify(subject, text, to=to, cc=cc)
 
-@auth.requires_membership("manager")
-def challenged():
-    """ Retrieve votes not corresponding to
-    listed activities (name conflicts) and
-    store the results as a static file
-    """
-    response.generic_patterns = ["*",]
-    d_challenged = dict()
-    t_challenged = TBODY()
-    for voter in db(db.auth_user).select():
-        if not voter.tutorials in (None, ""):
-            for tt in voter.tutorials:
-                act = db(db.activity.title == tt).select().first()
-                if act is None:
-                    # agregar a dict por nombre
-                    if not tt in d_challenged:
-                        d_challenged[tt] = 0
-                    d_challenged[tt] += 1
-                    t_challenged.append(TR(TD(voter.id), TD("%s %s" % (voter.first_name, voter.last_name)), TD(tt)))
-    results = UL()
-    for k, v in d_challenged.iteritems():
-        results.append(LI("%s: %s" % (k, v)))
-    return dict(message=H3(T("List of mismatching activity names voted")),
-                challenged=results,
-                votes=TABLE(THEAD(TR(TH(T("user")), TH(T("name")), TH("voted for"))), t_challenged))
+

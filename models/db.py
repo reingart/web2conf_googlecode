@@ -2,7 +2,7 @@ from gluon.tools import *
 import uuid, datetime, re, os, time, stat
 now=datetime.datetime.now()
 
-migrate = False
+migrate = DEV_TEST
 fake_migrate = False
 
 if SUSPEND_SERVICE:
@@ -23,7 +23,9 @@ PAST=datetime.datetime.today()-datetime.timedelta(minutes=1)
 #### end cleanup sessions
 
 def wysiwyg(field,value):
-    return DIV(field.name,TEXTAREA(_name=field.name, _cols="60", value=value, _id="wysiwyg"))
+    return DIV(field.name,TEXTAREA(_name=field.name, _cols="60", value=value, 
+                                   _id="wysiwyg",
+                                   _style="width: 810px; height: 200px;"))
 
 
 ######################################
@@ -147,7 +149,7 @@ auth.settings.cas_domains = None        # disable CAS
 auth.define_tables(username=False, migrate=migrate)
 auth.settings.controller='user'
 auth.settings.login_url=URL(r=request,c='user',f='login')
-auth.settings.on_failed_authorization=URL(r=request,c='user',f='login')
+#auth.settings.on_failed_authorization=URL(r=request,c='user',f='login')
 auth.settings.logout_next=URL(r=request,c='default',f='index')
 auth.settings.register_next=URL(r=request,c='default',f='index')
 auth.settings.verify_email_next=URL(r=request,c='default',f='index')
@@ -156,8 +158,11 @@ auth.settings.retrieve_password_next=URL(r=request,c='user',f='login')
 auth.settings.change_password_next=URL(r=request,c='default',f='index')
 auth.settings.logged_url=URL(r=request,c='user',f='profile')
 auth.settings.create_user_groups = False
-auth.settings.actions_disabled = ['register', 'change_password','request_reset_password']
+#sauth.settings.actions_disabled = ['register', 'change_password','request_reset_password']
 auth.settings.reset_password_requires_verification = True
+auth.settings.formstyle = "bootstrap"
+auth.settings.label_separator = ""
+
 
 if EMAIL_SERVER:
     mail=Mail()                                  # mailer
@@ -205,7 +210,7 @@ else:
 db.auth_user.confirmed.label = T("Confirm attendance")
 
 # badge:
-if True:
+if ENABLE_BADGE:
     db.auth_user.badge_line1.readable = True
     db.auth_user.badge_line2.readable = True
     db.auth_user.badge_line1.writable = True
@@ -216,60 +221,3 @@ if True:
     db.auth_user.badge_line1.comment = T("(i.e. position)")
     db.auth_user.badge_line2.comment = T("(ie. interests)")
     db.auth_user.sponsor_id.comment = T("(logo for badge)")
-
-
-# conference options
-db.define_table("option",
-    Field("name", "string", unique=True),
-    Field("value", "text", comment=T("Value or record reference")),
-    Field("valuetype", requires=IS_EMPTY_OR(IS_IN_SET({"integer":T("integer"),
-        "double":T("double"), "string":T("string"), "text": T("text"),
-        "boolean":T("boolean"), "date": T("date"), "datetime": T("datetime"),
-        "reference": T("reference")}))),
-    Field("tablename", requires=IS_EMPTY_OR(IS_IN_SET(db.tables)), default=None),
-    Field("description", "text"), 
-    format=lambda row: row.name,
-    migrate=migrate, fake_migrate=fake_migrate
-    )
-
-
-def get_option(name, default=None):
-    cdata = cache.ram(name, lambda: retrieve_option(name, default=default), 12*60*60)
-    return cdata
-
-def retrieve_option(name, default=None):
-    option = db(db.option.name==name).select().first()
-    if option is not None:
-        if option.valuetype == "reference":
-            try:
-                obj = db[option.tablename][int(option.value)]
-            except (ValueError, TypeError, AttributeError):
-                obj = default
-        else:
-            try:
-                if option.valuetype == "integer":
-                    obj = int(option.value)
-                elif option.valuetype == "double":
-                    obj = float(option.value)
-                elif option.valuetype == "boolean":
-                    if option.value in ("", "False", None, False):
-                        obj = False
-                    else:
-                        obj = True
-                elif option.valuetype == "date":
-                    ymd = [int(v) for v in option.value.split("-")]
-                    obj = datetime.date(ymd[0], ymd[1], ymd[2])
-                elif option.valuetype == "datetime":
-                    split_data = option.value.split(" ")
-                    ymd = [int(v) for v in split_data[0].split("-")]
-                    hms = [int(v) for v in split_data[1].split(":")]
-                    obj = datetime.datetime(ymd[0], ymd[1], ymd[2],
-                    hms[0], hms[1], hms[2])
-                else:
-                    # string, text, other types
-                    obj = option.value
-            except  (ValueError, TypeError, AttributeError):
-                obj = option.value            
-    else:
-        obj = default
-    return obj
