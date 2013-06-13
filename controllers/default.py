@@ -5,14 +5,13 @@
 @caching
 def index():
     ## for pycontech: redirect(URL(c='about', f='index'))
-    response.files.append(URL(r=request,c='static',f='jquery-slideshow.css'))
-    response.files.append(URL(r=request,c='static',f='jquery-slideshow.js'))
     response.reg_count = cache.ram(request.env.path_info + ".reg_count", 
                                    lambda: db(db.auth_user).count(), 
                                    time_expire=60*5)
     days = (CONFERENCE_DATE.date() - TODAY_DATE.date()).days
     response.days_left = days if days > 0 else 0
-    return response.render(plugin_flatpage()) 
+    return {'form': None, 'body': None}
+    #return response.render(plugin_flatpage()) 
     
 @caching
 def about():
@@ -62,7 +61,7 @@ def tweet():
     return dict(form=form)
 
 
-@cache(request.env.path_info,time_expire=60*15,cache_model=cache.ram)
+##@cache(request.env.path_info,time_expire=60*15,cache_model=cache.ram)
 def twitter():
     session.forget()
     session._unlock(response)
@@ -72,8 +71,9 @@ def twitter():
         if TWITTER_HASH:
             # tweets = urllib.urlopen('http://twitter.com/%s?format=json' % TWITTER_HASH).read()
             try: 
+                # abria que usar la API 1.1 (seguramente aluna biblioteca)
                 tweets = cache.disk(request.env.path_info + ".tweets", 
-                                               lambda: urllib.urlopen("http://search.twitter.com/search.json?q=%s" % TWITTER_HASH).read(), 
+                                               lambda: urllib.urlopen("https://api.twitter.com/1.1/search/tweets.json?q=%%40%s" % TWITTER_HASH).read(), 
                                                time_expire=60*15)
             except:
                import os
@@ -90,14 +90,19 @@ def twitter():
             data = sj.loads(tweets, encoding="utf-8")
             the_tweets = dict()
             
-            for obj in data["results"]:
-                the_tweets[obj["id"]] = (obj["created_at"], obj["from_user"], obj["profile_image_url"], obj["text"])
+            if "results" in data:
+                for obj in data["results"]:
+                    the_tweets[obj["id"]] = \
+                        (obj["created_at"], obj["from_user"],
+                         obj["profile_image_url"], obj["text"])
+            else:
+                raise Exception(str(data))
             ret = dict(message = None, tweets = the_tweets)
         else:
             ret = dict(tweets = None, message = 'disabled')
 
     except Exception, e:
-        ret = dict(tweets = None, message = DIV(T('Unable to download because:'),BR(),str(e)))
+        ret = dict(tweets = None, message = DIV(T('Unable to download tweets:'),BR(),str(e)))
     return response.render(ret)
 
 
@@ -129,9 +134,12 @@ def fast_download():
     response.headers['Content-Type'] = gluon.contenttype.contenttype(ext)
     
     # remove/add headers that prevent/favors caching
-    del response.headers['Cache-Control']
-    del response.headers['Pragma']
-    del response.headers['Expires']
+    if 'Cache-Control' in response.headers: 
+        del response.headers['Cache-Control']
+    if 'Pragma' in response.headers:
+        del response.headers['Pragma']
+    if 'Expires' in response.headers:
+        del response.headers['Expires']
     filename = os.path.join(request.folder,'uploads',request.args(0))
 
     # resize speaker pictures!
@@ -241,14 +249,16 @@ def planet():
     else:
         f = open(path, "r+")
         rss = None
-    portalocker.lock(f, portalocker.LOCK_EX)
-    if not rss:
-        rss = pickle.load(f)
-    else:
-        f.seek(0)
-        pickle.dump(rss, f)
-    portalocker.unlock(f)
-    f.close()
+    try:
+        portalocker.lock(f, portalocker.LOCK_EX)
+        if not rss:
+            rss = pickle.load(f)
+        else:
+            f.seek(0)
+            pickle.dump(rss, f)
+    finally:
+        portalocker.unlock(f)
+        f.close()
 
     # .rss requests
     if request.extension == "rss":
@@ -262,3 +272,4 @@ def planet():
     return response.render(dict(rss = rss, rss2 = rss2))
 
 def privacy(): return plugin_flatpage()
+
