@@ -29,7 +29,7 @@ def index():
     d = dict(activities=activities, reviews=reviews, authors=authors)
     return response.render(d)
 
-@auth.requires(auth.has_membership(role='reviewer') or TODAY_DATE>REVIEW_DEADLINE_DATE)
+@auth.requires(auth.has_membership(role='reviewer') or auth.has_membership("manager") or TODAY_DATE>REVIEW_DEADLINE_DATE)
 def ratings():
     query = (db.auth_user.id==db.activity.created_by)
     activities_author = db(query).select(db.auth_user.ALL, db.activity.ALL)
@@ -62,9 +62,11 @@ def ratings():
 
 @auth.requires_login()
 def vote():
-    if ALLOW_VOTE == False:
-        response.generic_patterns = ["*",]
-        return dict(message=H3(T("Voting is disabled")))
+    allowed = ALLOW_VOTE
+    if auth.has_membership("manager") or auth.has_membership("reviewer"):
+        allowed = True
+    if not allowed:
+        return dict(message=H3(T("Voting is disabled")), allowed=allowed)
 
     import random
     
@@ -137,7 +139,7 @@ def vote():
     elif form.errors:
         response.flash = 'form has errors'
 
-    return dict(form=form, levels=ACTIVITY_LEVEL_HINT, message=db.auth_user.tutorials.comment)
+    return dict(form=form, levels=ACTIVITY_LEVEL_HINT, message=db.auth_user.tutorials.comment, allowed=allowed)
 
 @caching
 def accepted():
@@ -296,12 +298,12 @@ def review():
     #  onaccept=email_author
     if reviews:
         form=crud.update(db.review, reviews[0].id,
-                         next=URL(r=request,f='proposed'),
-                         ondelete=lambda form: redirect(URL(r=request,c='default',f='index')),)
+                         next=URL(r=request,f='index'),
+                         ondelete=lambda form: redirect(URL(r=request,f='index')),)
     else:
         db.review.activity_id.default=activity.id
         form=crud.create(db.review, 
-                         next=URL(r=request,f='proposed'))
+                         next=URL(r=request,f='index'))
     return dict(activity=activity,form=form)
 
 
@@ -391,8 +393,9 @@ def email_author(form):
         text = PROPOSE_NOTIFY_TEXT % tvars
         subject = PROPOSE_NOTIFY_SUBJECT % tvars
     elif request.function == "comment":
+        cc = [text.strip() for text in ON_PROPOSE_EMAIL.split(";") if "@" in text]
         activity = db.activity[request.args[0]]
-        tvars = dict(activity=activity.title, user=user, link=URL(r=request,f='display',args=activity.id, scheme=True, host=True))        
+        tvars = dict(activity=activity.title, user=user, link=URL(r=request,f='display',args=activity.id, scheme=True, host=True))
         tvars["comment"] = form.vars.body
         text = COMMENT_NOTIFY_TEXT % tvars
         subject = COMMENT_NOTIFY_SUBJECT % tvars
@@ -425,3 +428,4 @@ def email_author(form):
 
 %(backup)s""" % dict(note=T("Following is a copy of the submitted data"), backup=backup)
             notify(subject, backup, to=ACTIVITY_BACKUP_TO, cc=cc)
+
