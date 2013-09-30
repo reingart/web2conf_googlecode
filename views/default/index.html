@@ -11,6 +11,7 @@ $(function()
 </script>
 {{pass}}
 
+
 <div class="alert">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
     <h3>{{=T("%s days left") % (response.days_left,)}} 
@@ -19,43 +20,139 @@ $(function()
 </div>
 
 <div class="jumbotron">
-    <h1>¡Python en Rosario! 24 y 25 de Octubre, super awesome!</h1>
-    <p class="lead">Python es un lenguaje dinámico comparable con Java, .NET, PHP y Ruby
-mucho más intuitivo y fácil de aprender, alentando la colaboración.
-Disfruta programar tan rápido como piensas, de forma clara y expresiva.
-Ven y conoce porqué Google, Yahoo, Disney, Cisco, LucasFilm, Red Hat,
-Pixar, VMware, Canonical (Ubuntu), NASA, YouTube y varias empresas
-nacionales, universidades locales, docentes e investigadores usan Python!</p>
-    <a class="btn btn-large btn-success" href="{{=URL(c="user", f="register")}}">Inscribite hoy!</a>
+    <h1>¡Python en Rosario! 24 y 25 de Octubre</h1><!-- , super awesome!-->
+    <p class="lead">Python es un lenguaje dinámico comparable a Java, .NET, PHP y Ruby, mucho más intuitivo y fácil de aprender.
+Disfrutá programando tan rápido como pensás, escribiendo código claro y expresivo que alienta la colaboración.
+Google, Yahoo, Disney, Cisco, LucasFilm, Red Hat, Pixar, VMware, Canonical (Ubuntu), 
+NASA, YouTube y varias empresas nacionales, universidades locales, docentes e investigadores usan Python. 
+¡Vení a conocer los motivos! </p>
+    <a class="btn btn-large btn-success" href="{{=URL(c="user", f="register")}}">Inscribite hoy!</a><p style="text-align:left;font-size:2em;font-weight:bold;margin-top:1em;">PyCon Argentina anteriores: <a href="http://ar.pycon.org/2009">2009</a>&nbsp;&nbsp;<a href="http://ar.pycon.org/2010">2010</a>&nbsp;&nbsp;<a href="http://ar.pycon.org/2011">2011</a>&nbsp;&nbsp;<a href="http://ar.pycon.org/2012">2012</a>
+    </p>
+</div>
+
+<div style="padding: 25px"></div>
+
+
+<div id="myCarousel" class="carousel slide">
+  <!-- Carousel items -->
+  <div class="carousel-inner">
+    
+    <div class="active item">
+        <img src="/2013dev/static/img/rosario.jpg" width="870px" height="500px">
+        <div class="carousel-caption">
+            <h4>Rosario, Sede de PyCon Argentina 2013</h4>
+            <p>Urbe cosmopolita con diversos atractivos culturales y turísticos, 
+recibirá este año a cientos de desarrolladores, varias empresas y futuros nuevos usuarios 
+del lenguaje de programación Python. 
+Esta será la 5ta edición de la conferencia que reune expertos, docentes, científicos, estudiantes y entusiastas de Argentina y el mundo. </p>
+        </div>    
+    </div>
+    
+    <div class=" item">
+        <img src="http://1.bp.blogspot.com/-oFeTQIz_UMo/UKpx6Me6eKI/AAAAAAAAGpc/jYW_3F73nws/s1600/DSCF1718.JPG" width="870px" height="500px">
+        <div class="carousel-caption">
+            <h4>¡Una conferencia desde la comunidad abierta a todos!</h4>
+            <p>Sumáte a los cientos de participantes que se reunen en la comunidad de Python más grande del mundo para hispanoparlantes. 
+Podés compartir tus experiencias y aprender en un ambiente distendido y amigable, con invitados internacionales, empresas, 
+y disertantes reconocidos.</p>
+        </div>    
+    </div>
+    
+  </div>
+  <!-- Carousel nav -->
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 </div>
 
 
-<div style="padding: 5px"></div>
 
-{{if body:}}
-<div class="hero-unit">
-{{=body}}
+<div class="jumbotron">
+    <h1>¿Dónde y cuándo?</h1>
+    <p>La conferencia se desarrollará en el Teatro Asturias, situado en la ribera del Río Paraná.</p>
+    <div id="mapdiv" width="50%" heigth="50%"></div>
+    <script src="{{=URL(request.application,'static','openlayers/OpenLayers.js')}}"></script>
+    <script>
+          OpenLayers.ImgPath = '{{=URL(request.application, "static", "openlayers/img")}}' + '/';
+          map = new OpenLayers.Map("mapdiv");
+          map.addLayer(new OpenLayers.Layer.OSM());
+          var markers = new OpenLayers.Layer.Markers( "Markers" );
+          map.addLayer(markers);
+
+          var teatroAsturias = new OpenLayers.Geometry.Point(-60.63683, -32.93819)
+              .transform('EPSG:4326', 'EPSG:3857');
+          var taLonLat= new OpenLayers.LonLat( teatroAsturias.getBounds().getCenterLonLat() );
+          markers.addMarker(new OpenLayers.Marker(taLonLat));
+          var popupTA = new OpenLayers.Popup.FramedCloud("Popup",
+            teatroAsturias.getBounds().getCenterLonLat(), null,
+            'PyCon.ar 2013<br>Teatro Asturias', null,
+            true
+          );
+
+          var terminalDeBondis = new OpenLayers.Geometry.Point(-60.67132, -32.93945)
+              .transform('EPSG:4326', map.getProjectionObject());
+          var termLonLat= new OpenLayers.LonLat( terminalDeBondis.getBounds().getCenterLonLat() );
+          markers.addMarker(new OpenLayers.Marker(termLonLat));
+          var popupTerm = new OpenLayers.Popup.FramedCloud("Popup",
+            terminalDeBondis.getBounds().getCenterLonLat(), null,
+            'Terminal de Omnibus<br>de Rosario', null,
+            true
+          );
+
+          var center= new OpenLayers.LonLat(-60.6551, -32.9390)
+              .transform(
+                  new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                  map.getProjectionObject() // to Spherical Mercator Projection
+              );
+          map.setCenter (center, 15);
+          map.addPopup (popupTA);
+          map.addPopup (popupTerm);
+    </script>
+    
+    <h1> Cómo llegar </h1>
+    <p> El teatro no queda muy lejos de la Terminal de Ómnibus, unas 30 cuadras. Si quieren tomarse un colectivo, el pasaje sale ARS 4. Un taxi debería andar rondando los ARS 35.
+        Si vienen en auto, al lado del teatro hay un parking donde pueden dejarlo; normalmente hay un muchacho que «cuida» «por unas monedas».</p>
+    	
+    <h1> Dónde alojarse </h1>
+    	<p>Tenemos un arreglo con la gente de Rosario Alojamientos.
+    	Se pueden poner en contacto con ellos en <a href="http://www.rosarioalojamientos.com/formulario-de-contacto.html">este formulario</a>.
+            Tienen que mencionar que van a PyCon.ar-2013, cuántas personas van, y si quieren una pieza compartida (tipo hostel) o un depto privado.</p>
+    	
+    <p>También tenemos en el wiki de PyAr un <a href="http://python.org.ar/PyConArgentina/2013/CouchSurfing">poor man's CouchSurfing</a>. 
+    	Allí se peuden anotar gente que quiera alojar y gente que quiera ser alojada. Luego se ponen en contacto entre ustedes. 
+    	Notar que este método no asegura que se vaya a conseguir alojamiento.
+    	</p>
+    	
+    <h1> Dónde comer </h1>
+    <p> Cerca del teatro, subiendo las escaleras a unos 3 minutos de caminata, hay lugares para almorzar: Focacha, Quilagua y Quita Pena.</p>
+    <p> Quita Pena ofrece menues rápidos, como ser minutas o pizzas, los precios son: </p>
+    <ul>
+        <li>1/2 Pizza + gaseosa + café: $35</li>
+        <li>Tostado + gaseosa + café: $35</li>
+        <li>Ensalada + gaseosa + café: $35</li>
+    </ul>
+    <p> Focacha y Quilagua ofrecen menues ejecutivos (comidas elaboradas) a $45 que constan del plato principal, gaseosa, postre (ensalada de frutas o helado) y café.</p>
+    <p> Para terminar, la versión de almuerzo económica está en calle Salta y Corrientes (a unas 3 cuadras del evento), donde hay un super Dar por si se quiere comprar pan, fiambre y la gaseosa. </p>
 </div>
-{{pass}}
 
 {{if form:}}
-  {{=form}}
+    {{=form}}
 {{pass}}
 
-<div class="row-fluid">
-    <div class="span6">
+<!-- div class="row-fluid" -->
+    <!-- div class="span6" -->
         {{# the custom twitter timeline is broken }}
         {{if True or TWITTER_HASH:}}
             <!-- <h3><img src={{=URL(c="static", f="img/twitter.png")}} alt="twitter"/> {{=T("%s Recent Tweets"%TWITTER_HASH)}} &nbsp;
             <a href="https://twitter.com/pyconar" class="twitter-follow-button" data-show-count="false" data-lang="es">Seguir a @pyconar</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></h3> -->
                 {{# LOAD(c="default", f="twitter.load", ajax=True) }}
         {{pass}}
-		  <a class="twitter-timeline"  href="https://twitter.com/pyconar"  data-widget-id="347683218054586368">Tweets de @pyconar</a>
-          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-    </div>
-    <div class="span6">
-        <div id="news">
-          {{=LOAD(c="default", f="planet.load", ajax=True) }}
-        </div>
-    </div>
-</div>
+		  <!-- a class="twitter-timeline"  href="https://twitter.com/pyconar"  data-widget-id="347683218054586368">Tweets de @pyconar</a-->
+          <!-- script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script -->
+    <!-- /div -->
+    <!-- div class="span6" -->
+        <!-- div id="news" -->
+          {{#LOAD(c="default", f="planet.load", ajax=True) }}
+        <!-- /div -->
+        
+    <!-- /div -->
+<!-- /div -->

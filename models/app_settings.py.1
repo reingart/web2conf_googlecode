@@ -12,7 +12,7 @@ SUSPEND_SERVICE = False
 # True for accepting user activity votes
 ALLOW_VOTE = False
 # call for proposals
-CFP = False
+CFP = True
 
 ######################################
 ### PARAMETERS
@@ -82,7 +82,7 @@ T_SHIRT_SIZES_LABELS=(T('no, thanks'),    T("small"),T("medium"),T("large"),T("x
 # NOTE: we add 6 hours since our server is EST, and this will cover Hawaii
 #  will want to have these times be session time local in next rev.
 TODAY_DATE=datetime.datetime.today()
-PROPOSALS_DEADLINE_DATE=datetime.datetime(2013,8,26,23,59,59)
+PROPOSALS_DEADLINE_DATE=datetime.datetime(2013,8,12,23,59,59)
 REVIEW_DEADLINE_DATE=datetime.datetime(2013,8,31,23,59,59)
 EARLYBIRD_DATE=datetime.datetime(2013,10,12,23,59,0)
 PRECONF_DATE=datetime.datetime(2013,11,2,23,59,0)
@@ -98,7 +98,7 @@ ATTENDEE_TYPES=(
  ('gratis',T('Gratuito, $0')),
 )
 
-#
+# 
 ATTENDEE_TYPE_COST=dict(
      professional=dict(general=250, preconf=195, earlybird=175, speaker=125),
      enthusiast=dict(general=150, preconf=130, earlybird=115,  speaker=85),
@@ -133,7 +133,7 @@ else:
                  'tutorial', 'workshop', 'project',
                  'stand', 'summit', 'open space',
                  'social', 'break', 'lightning talk',
-                 'sprint', 'paper',
+                 'sprint', 'paper', 
                  'special')
 
 ACTIVITY_CATEGORIES=sorted(('py3k','gui','web','cli','herramientas',
@@ -152,28 +152,28 @@ ACTIVITY_TRACKS=("General", "Science", "Student Works", "Extreme")
 ACTIVITY_DURATION={'talk': 40, 'extreme talk': 30, 'tutorial': 120, 'workshop': 0, 'poster': 0, 'project': 0, 'panel': 45, 'plenary': 60, 'keynote': 60}
 
 # TODO: create a room table (id, name, venue)!
-ACTIVITY_ROOMS={1: "Auditorium", 2: "Túnel 4", 3: "Room B", 4: "Room C", 7: "Meeting Room", 0: "-"}
+ACTIVITY_ROOMS={1: "Auditorium", 2: "Room A", 3: "Room B", 4: "Room C", 7: "Meeting Room", 0: "-"}
 ACTIVITY_ROOMS_ADDRESS={1: "", 2: "", 3: "", 4: "", 0: "-"}
 
 # Estimate room sizes (actual size*attendance factor: 0.30 (talks), *1 for workshops, 0.60 for sprints (shared))
 ACTIVITY_ROOMS_EST_SIZES={1: 40, 2: 40, 3: 40, 4: 40, 5: 38, 6: 60, 7: 8, 8: 8, 9: 8, 10: 8, 11: 40, 0: "-"}
-ACTIVITY_VENUE=[SPAN(A("Main Venue \"Downtown\"", _href=URL(c="venue"))), SPAN(A("Main Venue \"Downtown\"", _href=URL(c="venue"))), SPAN(), SPAN(), SPAN(), SPAN()]
+ACTIVITY_VENUE=SPAN(A("Main Venue \"Downtown\"", _href=URL(c="venue")))
 
 ACTIVITY_SHOW_DESCRIPTION = False # hide desc to public
 
 ACTIVITY_BACKUP_TO = "pyconar2013@gmail.com"
 
 PROPOSALS_DEADLINE_DATE_PER_ACTIVITY_TYPE={
-    'talk': datetime.datetime(2013,8,26,23,59,59),
-    'extreme talk': datetime.datetime(2013,8,26,23,59,59),
-    'tutorial': datetime.datetime(2013,8,26,23,59,59),
-    'keynote': datetime.datetime(2013,8,26,23,59,59),
-    'plenary': datetime.datetime(2013,8,26,23,59,59),
-    'poster': datetime.datetime(2013,8,26,23,59,59),
-    'paper': datetime.datetime(2013,8,26,23,59,59),
-    'project': datetime.datetime(2013,8,26,23,59,59),
-    'stand': datetime.datetime(2013,8,26,23,59,59),
-    'sprint': datetime.datetime(2013,8,26,23,59,59),
+    'talk': datetime.datetime(2013,8,12,23,59,59),
+    'extreme talk': datetime.datetime(2013,8,12,23,59,59),
+    'tutorial': datetime.datetime(2013,7,31,23,59,59),
+    'keynote': datetime.datetime(2013,9,12,0,0,0),
+    'plenary': datetime.datetime(2013,9,12,0,0,0),
+    'poster': datetime.datetime(2013,10,19,23,59,59),
+    'paper': datetime.datetime(2013,9,12,0,0,0),
+    'project': datetime.datetime(2013,10,12,0,0,0),
+    'stand': datetime.datetime(2013,10,12,0,0,0),
+    'sprint': datetime.datetime(2013,10,12,0,0,0),
     }
 
 ON_PROPOSE_EMAIL = "edvm@fedoraproject.org" #email address list, separated by ";"
@@ -191,7 +191,7 @@ CONFIRM_NOTIFY_TEXT = str(T("""Your activity %(activity)s has been confirmed.
 You can access the current activity information at %(link)s"""))
 CONFIRM_NOTIFY_SUBJECT = str(T("The activity %(activity)s was confirmed"))
 
-SPONSOR_LEVELS=("Organizer", "Diamond", "Gold", "Silver", "Bronx", "Specials Thanks", "Collaborators", "Media", "Adherent")
+SPONSOR_LEVELS=("Organizer", "Gold", "Silver", "Bronx", "Specials Thanks", "Collaborators", "Media", "Adherent")
 
 # verify by email, unless running a developer test:
 EMAIL_VERIFICATION= not DEV_TEST
@@ -240,7 +240,7 @@ EMAIL_VERIFY_BODY=str(T("""
 Dear Attendee,\n
 To proceed with your registration and verify your email, click on the following link:\n
 %s\n--\n%s\n""") % (
- "http://%s%s/%%(key)s" % (request.env.http_host, URL(r=request,f='verify')),
+ "http://%s%s/%%(key)s" % (request.env.http_host, URL(r=request,f='verify')), 
  response.title))
 
 IMAP_URI = None

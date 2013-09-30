@@ -27,7 +27,7 @@
   </span>
 
   <div id="{{="bio%s"% activity.id}}" style="display: none; padding-left: 4em; padding-bottom: 1em; font-size: smaller">{{=author.resume and MARKMIN(author.resume, sep="") or ''}}</div>
-  <span style="padding-left: 3em; font-weight: bold;">{{=activity.duration}}{{=T("min")}} {{=T("Level")}} {{=T(activity.level)}} {{if activity.confirmed and activity.scheduled_datetime and activity.scheduled_room:}} {{= "(%s %s %s)" % ("%s %s %s" % (T(activity.scheduled_datetime.strftime("%A")), activity.scheduled_datetime.strftime("%d"), activity.scheduled_datetime.strftime("%H:%M")), T("Room"), ACTIVITY_ROOMS[int(activity.scheduled_room)]) or ""}}{{pass}}</span><br/>
+<span style="padding-left: 3em; font-weight: bold;">{{if activity.duration:}}{{=activity.duration}}{{=T("min")}}{{pass}} {{=T("Level")}} {{=T(activity.level)}} {{if activity.confirmed and activity.scheduled_datetime and activity.scheduled_room:}} {{= "(%s %s %s)" % ("%s %s %s" % (T(activity.scheduled_datetime.strftime("%A")), activity.scheduled_datetime.strftime("%d"), activity.scheduled_datetime.strftime("%H:%M")), T("Room"), ACTIVITY_ROOMS[int(activity.scheduled_room)]) or ""}}{{pass}}</span><br/>
   <span style="padding-left: 3em; font-weight: bold;">
     Categorias: {{=', '.join(activity.categories)}}
   </span>

@@ -3,7 +3,10 @@
 <div class="frame">
 
 <h1>{{=T('Schedule')}}</h1>
-
+    {{if auth.has_membership("manager"):}}
+      {{# response._vars.keys()}}
+      {{# activities_per_date}}
+    {{pass}}
 <div class="alert alert-block">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
 
@@ -45,7 +48,7 @@
 </div>
 
 {{for i, (day, schedule_table) in enumerate(sorted(schedule_tables.iteritems())):}}
-  <h3>{{="%s %s" % (T(day.strftime("%A")), day.strftime("%d"))}} - {{=ACTIVITY_VENUE[i]}}</h3>
+<h3>{{="%s %s" % (T(day.strftime("%A")), day.strftime("%d"))}} - {{try:}}{{=ACTIVITY_VENUE[i]}}{{except:}} {{pass}}</h3>
   {{=schedule_table}}
 {{pass}}
 
@@ -58,7 +61,7 @@
 {{=T("Unconfirmed activities are shown shaded until author confirms scheduled date, time and room.")}}
 </p>
 
-<p><b>Importante:</b> eventualmente las fechas y horarios pueden cambiar sin previo aviso por cuestiones agenas a la organización del evento. Por favor, revise esta página frecuentemente.</p>
+<p><b>Importante:</b> eventualmente las fechas y horarios pueden cambiar sin previo aviso por cuestiones ajenas a la organización del evento. Por favor, revise esta página frecuentemente.</p>
 </div>
 {{=DIV(hidden)}}
 

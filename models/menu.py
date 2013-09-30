@@ -7,12 +7,14 @@ response.menu=[
 
 if ENABLE_TALKS:
    response.menu.append([T('Schedule'), False, URL(r=request,c='schedule',f='index')])
+   """
    response.menu.append([T('Proposals'),False,URL(r=request,c='activity',f='index'), [        
         [T('Propose talk'),False, URL(r=request,c='activity',f='propose')],
         [T('Voting'),False,URL(r=request,c='activity',f='vote')],
         [T('Ratings'),False,URL(r=request,c='activity',f='ratings')],
         [T('Index'),False,URL(r=request,c='activity',f='index')],
         ]])
+   """
 
 if auth.is_logged_in():
     submenu_info=[

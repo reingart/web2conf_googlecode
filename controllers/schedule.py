@@ -104,9 +104,9 @@ def index():
         slots = sorted(slots_per_date[day])
         for slot_n, slot in enumerate(slots):
             slot_duration = slots_per_date.get(day, {}).get(slot)
-            if not slot_duration:
-                caption = "N/A"
-            elif len(slots) < 4 and slot_duration > 60 and slot_n == len(slots)-1:
+            # if not slot_duration:
+            #    caption = "N/A"
+            if len(slots) < 4 and slot_duration > 60 and slot_n == len(slots)-1:
                 slot_end = datetime.datetime.combine(day, slot) + datetime.timedelta(minutes=slot_duration)
                 caption = T("%s to %s") % (slot.strftime("%H:%M"), 
                                         slot_end.strftime("%H:%M"))
@@ -228,8 +228,10 @@ def content():
     if not request.args:
         raise HTTP(404)
     activity = db.activity[request.args[0]]
-    if not activity.status=='accepted':
+    if activity and (not activity.status=='accepted'):
         raise HTTP(403)
+    elif not activity:
+        raise HTTP(200, T("Activity not found"))
     return MARKMIN(activity.abstract or '')
 
 @cache(request.env.path_info,time_expire=60*15,cache_model=cache.ram)

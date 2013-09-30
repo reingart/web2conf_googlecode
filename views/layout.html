@@ -44,6 +44,7 @@
   response.files.append(URL('static','css/bootstrap.min.css'))
   response.files.append(URL('static','css/bootstrap-responsive.min.css'))
   response.files.append(URL('static','css/web2py_bootstrap.css'))
+  response.files.append(URL('static','css/style.css'))
   }}
 
   {{include 'web2py_ajax.html'}}
@@ -94,8 +95,7 @@
         <div class="span12">
             <div class="page-header">
                 <h1>
-                    {{=IMG(_src=URL(c="static", f="img/pyconar.gif"))}}
-                    {{=response.title or request.application}}
+                    {{=IMG(_src=URL(c="static", f="img/logo_pyconar_rosario.png"))}}
                     <small>{{=response.subtitle or ''}}</small>
                 </h1>
             </div>
@@ -121,6 +121,10 @@
         {{if right_sidebar_enabled:}}
         <div class="span3">
             {{block right_sidebar}}
+            {{if not request.function=="diversity":}}
+            {{=BUTTON(T("On diversity"), BR(), "(CoC)", _onclick="window.open('%s');" % URL(c="conference", f="diversity"))}}
+              {{=BR()}}
+            {{pass}}
             {{if response.sponsors:}}
                   {{for sponsor_level in SPONSOR_LEVELS: }}
                   {{if response.sponsors.get(sponsor_level):}}

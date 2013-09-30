@@ -111,7 +111,7 @@ def vote():
                 fields.append(u)
                 fields.append(LI(
                     INPUT(_name='check.%s' % row.id, 
-                          _type="checkbox", 
+                          _type="checkbox", _style="float: left; margin: 3px",
                           value=(auth.user.tutorials and row.title in auth.user.tutorials) and "on" or "",
                           ),
                     LABEL(a.link(activity.title), " ",  
@@ -428,4 +428,3 @@ def email_author(form):
 
 %(backup)s""" % dict(note=T("Following is a copy of the submitted data"), backup=backup)
             notify(subject, backup, to=ACTIVITY_BACKUP_TO, cc=cc)
-
