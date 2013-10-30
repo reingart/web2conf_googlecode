@@ -52,7 +52,7 @@ db.define_table('auth_user',
     db.Field('personal_home_page',length=128,label=T('Personal Home Page'),default=''),
     db.Field('company_name',label=T('Entity Name'),default=''),
     db.Field('company_home_page',length=128,label=T('Entity Home Page'),default=''),
-    db.Field('t_shirt_size',label=T('T-shirt Size')),
+    db.Field('t_shirt_size',label=T('T-shirt Size'), readable=False,writable=False),
     db.Field('attendee_type',label=T('Registration Type'),default=ATTENDEE_TYPES[0][0],readable=False,writable=False),
     db.Field('discount_coupon',length=64,label=T('Discount Coupon'), readable=False,writable=False),
     db.Field('donation','double',default=0.0,label=T('Donation to PSF'),readable=False,writable=False),
@@ -77,6 +77,7 @@ db.define_table('auth_user',
     ##db.Field('cena_viernes','boolean', comment="-con cargo-"),
     ##db.Field('cena_sabado','boolean', comment="sin cargo para los disertantes + organizadores"),
     ##db.Field('cena_obs','string', comment="indique si quiere invitar a la cena a familiares o amigos (cant. de reservas) -con cargo-"),
+    Field('pos','integer', readable=False,writable=False),
     format="%(last_name)s, %(first_name)s (%(id)s)",
     migrate=migrate, fake_migrate=fake_migrate)
 
@@ -146,7 +147,7 @@ auth.settings.change_password_next=URL(r=request,c='default',f='index')
 auth.settings.logged_url=URL(r=request,c='user',f='profile')
 auth.settings.create_user_groups = False
 auth.settings.actions_disabled = ['register', 'change_password','request_reset_password']
-auth.settings.reset_password_requires_verification = True
+auth.settings.reset_password_requires_verification = not SIMPLIFIED_REGISTRATION
 
 if EMAIL_SERVER:
     mail=Mail()                                  # mailer
@@ -154,7 +155,7 @@ if EMAIL_SERVER:
     mail.settings.sender=EMAIL_SENDER
     mail.settings.login=EMAIL_AUTH
     auth.settings.mailer=mail                    # for user email verification
-    auth.settings.registration_requires_verification = EMAIL_VERIFICATION
+    auth.settings.registration_requires_verification = EMAIL_VERIFICATION# and not SIMPLIFIED_REGISTRATION
     auth.messages.verify_email_subject = EMAIL_VERIFY_SUBJECT
     auth.messages.verify_email = EMAIL_VERIFY_BODY
     
