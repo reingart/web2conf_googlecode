@@ -4,12 +4,15 @@
 <div class="frame">
 <h1>{{=T('Conference Participants')}}</h1>
 <table>
+{{if auth.has_membership(role='manager'):}}
 <tr><td width="10px"/><td>
 {{=T('%5d Pending Registrations',tot-pd)}}
 </td></tr><tr><td width="10px"/><td>
 {{=T('%5d Completed Registrations',pd)}}
-</td></tr><tr><td width="10px"/><td>
-{{=T('%5d Total Paid and Pending Registrations',tot)}}
+</td></tr>
+{{pass}}
+<tr><td width="10px"/><td>
+{{=T('%5d Total Registrations',tot)}}
 </td></tr>
 </table>
 <br/>
