@@ -14,6 +14,13 @@ def index():
     response.files.append(URL(r=request,c='static',f='jquery-slideshow.css'))
     response.files.append(URL(r=request,c='static',f='jquery-slideshow.js'))
     session.forget()
+    
+    response.reg_count = cache.ram(request.env.path_info + ".reg_count", 
+                                   lambda: db(db.auth_user).count(), 
+                                   time_expire=60*5)
+    days = (CONFERENCE_DATE.date() - TODAY_DATE.date()).days
+    response.days_left = days if days > 0 else 0
+    
     # do not cache flatpage edits!:
     if request.vars or request.args or request.flash or session.flash or auth.is_logged_in():
         r = response.render(plugin_flatpage()) 
