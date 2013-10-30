@@ -55,7 +55,7 @@ def janrain():
                                 onaccept=lambda form:update_pay(auth.user)))
 
 def verify():
-    return auth.verify_email(next=URL(r=request,f='login'))
+    return auth.verify_email(next=URL(r=request,c='default',f='index'))
 
 def register():
     alt_login_form, signals = create_rpx_login_form(f="janrain")
