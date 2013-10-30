@@ -1,18 +1,33 @@
-def coords_by_address(person):
-        import re, urllib
+def coords_by_address(person, error=False):
+        import json, urllib
+        city = person.city
+        state = person.state
         try:
             address=urllib.quote("%s, %s %s, %s" % (person.city,person.state,person.zip_code,person.country))
-            t=urllib.urlopen('http://maps.google.com/maps/geo?q=%s&output=xml'%address).read()
-            item=re.compile('\<coordinates\>(?P<la>[^,]*),(?P<lo>[^,]*).*?\</coordinates\>').search(t)
-            la,lo=float(item.group('la')),float(item.group('lo'))
-            return la,lo
-        except Exception, e: 
-            #raise RuntimeError(str(e))
+            t=urllib.urlopen('http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false' % address).read()
+            results=json.loads(t)['results']
+            if results:
+                # extract position
+                geo = results[0]['geometry']["location"]
+                la,lo=float(geo['lat']),float(geo['lng'])
+                # extract normalized city / state names:
+                for address_component in results[0]['address_components']:
+                    if address_component['types'][0] == "locality" and len(address_component['long_name']) > 2:
+                        city = address_component['long_name']
+                    if address_component['types'][0] == "administrative_area_level_1" and len(address_component['long_name']) > 2:
+                        state = address_component['long_name']
+                    ##raise RuntimeError("%s -> %s %s -> %s" % (person.city, city, person.state, state))
+                return la,lo, city, state
+        except Exception, e:
+            if error:
+                raise
+                raise RuntimeError(str("%s = %s" % (address, t)))
+                raise RuntimeError(str(e))
             pass
         #raise RuntimeError(str("%s = %s" % (address, t)))
-        return 0.0,0.0
+        return 0.0,0.0, city, state
 
-def update_zip(person):    
+def update_zip(person, error=False):
     ### compute zip code
     import shelve,os
     ##if not person.zip_code: return
@@ -25,9 +40,9 @@ def update_zip(person):
     else:
         la,lo=0.0,0.0
     """
-    lo,la=coords_by_address(person)
-    db(db.auth_user.id==person.id).update(latitude=la, longitude=lo)
-    return lo,la
+    la, lo, city, state = coords_by_address(person, error=error)
+    db(db.auth_user.id==person.id).update(latitude=la, longitude=lo, city=city, state=state)
+    return la,lo
 
 def update_billed_amount(person):
     ### person here can be a form instead of a record but should be record
@@ -46,7 +61,7 @@ def update_billed_amount(person):
             coupon.update_record(discount=ATTENDEE_TYPE_COST[person.attendee_type])
         due=max(0.0,due-coupon.discount)
         coupon.update_record(person=person.id)
-    if person.donation: 
+    if person.donation:
         due+=person.donation ### add donation
     db(db.auth_user.id==person.id).update(amount_billed=due)
     return due
@@ -67,7 +82,7 @@ def update_pay(person):
                    (db.money_transfer.from_person==db.auth_user.id).select()
     transfers_out=db(db.money_transfer.from_person==person.id).select()
     payments=db(db.payment.from_person==person.id).select()
-    amount_added=0.0    
+    amount_added=0.0
     for row in transfers_in:
         amount_added+=row.money_transfer.amount
     amount_subtracted=0.0
@@ -75,7 +90,7 @@ def update_pay(person):
         if row.approved: amount_subtracted+=row.amount
     amount_paid=0.0
     for row in payments:
-        if row.status.lower()=='charged': amount_paid+=row.amount   
+        if row.status.lower()=='charged': amount_paid+=row.amount
     session.amount_billed=person.amount_billed
     session.amount_paid=amount_paid
     session.amount_added=amount_added
@@ -97,8 +112,8 @@ def fill_just_data():
         import random, shelve,os
         if not is_gae:
             zips=shelve.open(os.path.join(request.folder,'private/zips.shelve'))
-        def r(t=None):       
-            if not t: return ''.join([['da','du','ma','mo','ce','co','pa','po','sa','so','ta','to'][random.randint(0,11)] for i in range(3)]) 
+        def r(t=None):
+            if not t: return ''.join([['da','du','ma','mo','ce','co','pa','po','sa','so','ta','to'][random.randint(0,11)] for i in range(3)])
             return t[random.randint(0,len(t)-1)]
         for k in range(100):
             name=r()
@@ -113,13 +128,13 @@ def notify(subject, text, to=None, cc=None):
     if to is None:
         to = auth.user.email
     info = response.title
-    
+
     # Address person
     addressing = T("Dear attendee")
-   
+
     message = T("""%s:\n%s\n\nPlease do not respond this automated message\n%s""")
     body = message % (addressing, text, info)
-    
+
     result = mail.send(to, subject, body, cc=cc)
 
     if result:
