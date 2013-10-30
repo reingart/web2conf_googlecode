@@ -7,10 +7,30 @@
 <p>{{=T('The map below shows the home location of all attendees who agreed to make their information public.')}}
 </p>
 
-  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{=googlemap_key}}" type="text/javascript"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?key={{=GOOGLEMAP_KEY}}&sensor=false" type="text/javascript"></script>
     <script type="text/javascript">
     //<![CDATA[
+
     function load() {
+        var mapOptions = {
+          center: new google.maps.LatLng({{=x0}},{{=y0}}),
+          zoom: 2,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+
+        {{for row in rows:}}{{if row.latitude and row.longitude:}}
+              var point = new google.maps.LatLng({{=row.latitude}},{{=row.longitude}});
+              var marker = new google.maps.Marker({
+                  position: point,
+                  map: map,
+                  title:"{{=row.include_in_delegate_listing and ( row.first_name+' '+row.last_name).replace('"',"'") or ''}}"
+              });
+        {{pass}}{{pass}}
+      }
+
+    function load1() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map"));
         map.addControl(new GSmallMapControl());
@@ -53,7 +73,7 @@
     //]]>
     </script>
 <center>
-    <div id="map" style="width: 600px; height: 300px"></div>
+    <div id="map_canvas" style="width: 700px; height: 600px"></div>
     <script>load();</script>
 </center>
 </div>
