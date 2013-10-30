@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 <div class="frame">
 <h1>{{=T('Speakers')}}</h1>
-{{for author in sorted(authors, key=lambda x: x.last_name.upper() ):}}
+{{for author in authors:}}
 {{if author.id in activities_by_author or True:}}
 <h2 id="{{=author.id}}">{{="%s %s" % (author.first_name, author.last_name)}}<a class="headerlink" href="#{{=author.id}}" title="Permanent link">¶</a></h2>
 <div class="wiki">
@@ -23,7 +23,9 @@
 <div style="clear:both"><ul>
 <!-- {{=author.id}}  -->
 {{for activity in activities_by_author.get(author.id, []):}}
+{{if activity.type!='break':}}
 <li>{{=A(activity.title, _href=URL(r=request,c='activity', f='accepted', anchor=activity.id ))}}</li>
+{{pass}}
 {{pass}}
 </ul>
 </div> 
