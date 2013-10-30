@@ -3,26 +3,10 @@
 <div class="frame">
 <h1>{{=T('Charts')}}</h1>
 
-<h2>{{=T('City')}}</h2>
-{{=chart_city}}
-<br /><br />
-
-<h2>{{=T('State')}}</h2>
-{{=chart_state}}
-<br /><br />
-
-{{if session.manager:}}
-<h2>{{=T('Registration date')}}</h2>
-{{=chart_registration_date}}
-<br /><br />
-
-<h2>{{=T('Certificate')}}</h2>
-{{=chart_certificates}}
-<br /><br />
-{{pass}}
-
-<h2>Tutorials</h2>
+<h2>Activities</h2>
 {{=chart_tutorials or T("Nobody registered for tutorials")}}
+<p>Nota: no todas las actividades han sido dadas de alta en el mismo momento y la votación no es obligatoria, 
+por lo que las preferencias son relativas (solo indican un estimado a grandes rasgos).</p>
 <br /><br />
 <h2>Attendee Type</h2>
 {{=chart_attendee_type}}
@@ -35,5 +19,24 @@
 <h2>Country</h2>
 {{=chart_country}}
 <br /><br />
+
+<h2>{{=T('State')}}</h2>
+{{=chart_state}}
+<br /><br />
+
+<h2>{{=T('City')}}</h2>
+{{=chart_city}}
+<br /><br />
+
+{{if session.manager:}}
+<h2>{{=T('Registration date')}}</h2>
+{{=chart_registration_date}}
+<br /><br />
+
+<h2>{{=T('Certificate')}}</h2>
+{{=chart_certificates}}
+<br /><br />
+{{pass}}
+
 
 </div>
