@@ -81,29 +81,6 @@ response.menu.append([T('Venue'),False,URL(r=request,c='venue',f='index'), [
     [T('Room Sharing'),False,URL(r=request,c='venue',f='room_sharing')],
     ]])
 
-#############################################
-# Insert Manage sub-menu item
-#############################################    
-
-if auth.has_membership(role='manager'):
-    submenu=[
-        [T('Settings'),False,URL("manage", "control_panel"), []],    
-        [T('CRUD'),False,URL(r=request,c='manage',f='_crud'), []],
-        [T('Upload'),False,URL(r=request,c='manage',f='upload'), []],
-        [T('Attendee Mail-List'),False, URL(r=request,c='manage',f='maillist')],
-        [T('Financials'),False,URL(r=request,c='manage',f='financials')],
-        [T('Expenses'),True,URL(r=request,c='expenses',f='index')],
-        [T('Payments'),False,URL(r=request,c='manage',f='payments')],
-        # [T('CSV for Badges'),False,URL(r=request,c='manage',f='badges')],
-        [T('Badges'),False,URL(r=request,c='manage',f='badge',args='auth_user')],
-        [T('Tutorials'),False,URL(r=request,c='manage',f='list_by_tutorial')],
-        # [T('Tutorials+food'),False,URL(r=request,c='manage',f='by_tutorial_csv')],
-        [T('FA-CSV'),False,URL(r=request,c='manage',f='fa_csv')],
-        [T('FA-(email all)'),False,URL(r=request,c='manage',f='fa_email_all')]
-    ]
-    submenu[1][3]=[['[%s]' % (table),
-               False,URL(r=request,c='manage',f='select',args=(table,))] for table in db.tables]
-    response.menu.append([T('Manage'),True,URL("manage", "control_panel"),submenu])
 
 #############################################
 # Insert Login and Logout menu items
