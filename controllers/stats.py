@@ -5,11 +5,13 @@
 def index():
     redirect(URL("attendees"))
     
-#@cache(request.env.path_info,time_expire=60*5,cache_model=cache.ram)
+@cache(request.env.path_info,time_expire=60*5,cache_model=cache.ram)
 def companies():
-    if auth.has_membership(role='manager'): s=db()
-    else: s=db(db.auth_user.include_in_delegate_listing==True)
-    rows=s.select(db.auth_user.company_name,
+    if auth.has_membership(role='manager'): 
+        s= (db.auth_user.id>0)
+    else: 
+        q = (db.auth_user.include_in_delegate_listing==True)
+    rows=db(q).select(db.auth_user.company_name,
                   db.auth_user.company_home_page,
                   orderby=db.auth_user.company_name,distinct=True)
     d = dict(rows=rows)
@@ -69,12 +71,13 @@ def charts():
         q = db.activity.id>0
     else:
         q = db.activity.status=='accepted'
-        q &= db.activity.type=='talk'
+        #q &= db.activity.type=='talk'
     tutorials = [row.title for row in db(q).select()]    
     if not is_gae:
         for k,item in enumerate(tutorials):
             m=db(db.auth_user.tutorials.like('%%|%s|%%'%item)).count()
-            cn.append((item,colors[k],m))
+            if m > 10:
+                cn.append((item,colors[k],m))
     else:        
         cn2={}
         for row in db(db.auth_user.id>0).select(db.auth_user.tutorials):
