@@ -10,21 +10,23 @@
 <li>{{=A(T('Speakers'),_href=URL(r=request,c='activity',f='speakers'))}}</li>
 </ul>
 </p>
+{{if activities_per_date:}}
 {{for day in sorted(activities_per_date.keys()):}}
 {{rows = activities_per_date [day]}}
 <h3>{{="%s %s" % (T(day.strftime("%A")), day.strftime("%d/%m/%Y"))}}</h3>
+{{for room_id, room in sorted(ACTIVITY_ROOMS.items()):}}
+<h4>{{=room}}</h4>
 <table class="schedule" id="sortable_table">
 <thead>
 <tr>
     <th>{{=T("Time")}}</th>
-    <th width="10%">{{=T("Room")}}</th>
     <th width="50%">{{=T("Activity")}}</th>
     <th width="30%">{{=T("Presenter")}}</th>
     <th>{{=T("Duration")}}</th>
 </tr>   
 </thead>
 <tbody>
-{{for i, row in enumerate(rows):}}
+{{for i, row in enumerate([row for row in rows if int(row.activity.scheduled_room) == room_id]):}}</td>
 {{activity=row.activity}}
 {{author=row.auth_user}}
 {{a=PluginMModal(title=activity.title,content=(activity.abstract and MARKMIN(activity.abstract, sep="") or ''),close=T('close'),width=50,height=50)}}
@@ -36,7 +38,6 @@
 {{pass}}
 <tr class="{{=tr_classes[0]}}">
 <td style="text-align: right">{{=activity.scheduled_datetime and activity.scheduled_datetime.time().strftime("%H:%M") or ''}}</td>
-<td style="text-align: center">{{=ACTIVITY_ROOMS[int(activity.scheduled_room)]}}</td>
 <td>{{=a.link(activity.title)}} </td>
 <td>{{=u.link(activity.authors)}}</td>
 <td style="text-align: center">{{=activity.duration}}' {{=levels.get(activity.level, "")}}</td>
@@ -46,13 +47,21 @@
 </table>
 
 {{pass}}
-
+{{pass}}
 <p style="text-align: center">
 {{=T('Level')}} (Orientativo): 
 {{for level in ACTIVITY_LEVELS:}}
 <span>{{=levels[level]}} {{=T(level)}}&nbsp;&nbsp;</span>
 {{pass}}
 </p>
+
+{{else:}}
+
+<p><b>Próximamente</b> el 11 de Octubre publicaremos el cronograma definitivo.</p>
+
+{{pass}}
+
+
 <p><b>Importante:</b> eventualmente las fechas y horarios pueden cambiar sin previo aviso por cuestiones agenas a la organización del evento. Por favor, revise esta página frecuentemente.</p>
 </div>
 {{pass}}
