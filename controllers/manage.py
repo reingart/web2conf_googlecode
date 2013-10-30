@@ -160,7 +160,8 @@ def badges():
 @auth.requires_membership(role='manager')
 def update_zips():
     for row in db(db.auth_user).select():
-        update_zip(row)
+        if not row.latitude and not row.longitude:
+            update_zip(row, error=True)
 
 
 @auth.requires_membership(role='manager')
