@@ -33,7 +33,7 @@ db.define_table('activity',
     db.Field('modified_by','integer',label=T("Modified By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
     db.Field('modified_on','datetime',label=T("Modified On"),readable=False,writable=False,default=request.now,update=request.now),
     db.Field('notes', 'text', comment=T("Additional remarks"), label=T("Notes")),
-    db.Field('license', 'string', default="CC BY-SA, Atribución - Compartir derivadas de la misma forma.", label=T("License")),
+    db.Field('license', 'string', default="CC BY 3.0, Creative Commons Atribución.", label=T("License")),
     format='%(title)s',
     migrate=migrate)
 
@@ -74,6 +74,10 @@ db.activity.type.represent=lambda activity_type: T(activity_type and activity_ty
 db.activity.duration.represent=lambda activity_duration: activity_duration and ("%s min" % activity_duration) or 'n/a'
 
 db.activity.notes.default = "Tipo de público: \nConocimientos previos: \nRequisitos Especiales: (hardware, materiales, ayuda financiera)"
+
+if len(ACTIVITY_TRACKS) == 1:
+    db.activity.track.default = ACTIVITY_TRACKS[0]
+
 
 db.define_table('activity_archived',db.activity,db.Field('activity_proposal',db.activity), migrate=migrate)
 
@@ -146,7 +150,7 @@ def activity_is_accepted():
     if db((db.activity.id==request.args[0])&(db.activity.status=='accepted')).count():
         return True
 
-TUTORIALS_LIST=[row.title for row in db(db.activity.status=='accepted').select(db.activity.title, orderby=db.activity.title)]
+TUTORIALS_LIST=[row.title for row in db((db.activity.status=='accepted')&(db.activity.type!='break')).select(db.activity.title, orderby=db.activity.title)]
 class IS_IN_SET_NOT_EMPTY(IS_IN_SET):
     def __call__(self, value):
         (values, error) = IS_IN_SET.__call__(self,value)
@@ -156,7 +160,7 @@ class IS_IN_SET_NOT_EMPTY(IS_IN_SET):
             return (values, error)
 db.auth_user.tutorials.requires=IS_IN_SET(TUTORIALS_LIST,multiple=True)
 db.auth_user.tutorials.comment=SPAN(T('(seleccione su preferencia de charlas para la organización del evento; '),
-A('más información',_target='_blank',_href='/2011/activity/accepted'),T(", la disponibilidad y horarios pueden variar sin previo aviso)"))
+A('más información',_target='_blank',_href='/buenosaires2013/activity/accepted'),T(", la disponibilidad y horarios pueden variar sin previo aviso)"))
 
 ACTIVITY_LEVEL_HINT = {}
 for i, level in enumerate(ACTIVITY_LEVELS):
