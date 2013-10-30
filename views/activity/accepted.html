@@ -4,14 +4,14 @@
 
 <h1>{{=T('Accepted Activities')}}</h1>
 
-<p><b>Nota: </b>El listado de actividades es provisorio, próximamente será actualizado con las charlas plenarias, paneles y talleres</p>
+<p><b>Nota: </b>El listado de actividades es provisorio y puede variar sin previo aviso. Próximamente será actualizado con las charlas plenarias, paneles y talleres.</p>
 
 {{for activity_type in ACTIVITY_TYPES:}}
 {{rows_by_activity = [row for row in rows if row.activity.type.lower().strip()==activity_type]}}
 {{if rows_by_activity: }}
 <p/>
 <h2>{{=T(activity_type).capitalize()}}</h2>
-{{for row in sorted(rows_by_activity, key=lambda x:x.activity.title.upper()):}}
+{{for row in sorted(rows_by_activity, key=lambda x:x.activity.scheduled_datetime):}}
 {{activity=row.activity}}
 {{author=row.auth_user}}
 <div id="{{=activity.id}}">
@@ -25,7 +25,7 @@
   </span> 
 
   <div id="{{="bio%s"% activity.id}}" style="display: none; padding-left: 4em; padding-bottom: 1em; font-size: smaller">{{=author.resume and MARKMIN(author.resume, sep="") or ''}}</div>     
-  <span style="padding-left: 3em; font-weight: bold;">{{=activity.duration}}{{=T("min")}} {{=T("Level")}} {{=T(activity.level)}} {{=activity.confirmed and "(%s %s %s)" % ("%s %s %s" % (T(activity.scheduled_datetime.strftime("%A")), activity.scheduled_datetime.strftime("%d"), activity.scheduled_datetime.strftime("%H:%M")), T("Room"), ACTIVITY_ROOMS[int(activity.scheduled_room)]) or ""}}</span><br/> 
+  <span style="padding-left: 3em; font-weight: bold;">{{=activity.duration}}{{=T("min")}} {{=T("Level")}} {{=T(activity.level)}} {{=activity.confirmed and "(%s %s %s)" % ("%s %s %s" % (T(activity.scheduled_datetime.strftime("%A")), activity.scheduled_datetime.strftime("%d %b"), activity.scheduled_datetime and activity.scheduled_datetime.strftime("%H:%M") or ''), T(""), ACTIVITY_ROOMS[int(activity.scheduled_room)]) or ""}}</span><br/> 
   <span style="padding-left: 3em; font-weight: bold;"> 
     Categorias: {{=', '.join(activity.categories)}}
   </span> 
