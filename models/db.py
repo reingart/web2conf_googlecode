@@ -56,7 +56,6 @@ db.define_table('auth_user',
     Field('company_home_page',length=128,label=T('Entity Home Page'),default=''),
     Field('badge_line1',label=T('Badge Line 1'),default='',readable=False,writable=False),
     Field('badge_line2',label=T('Badge Line 2'),default='',readable=False,writable=False),
-    Field('sponsor_id',"reference sponsor",label=T('Sponsor'),readable=False,writable=False),    
     Field('t_shirt_size',label=T('T-shirt Size')),
     Field('attendee_type',label=T('Registration Type'),default=ATTENDEE_TYPES[0][0],readable=False,writable=False),
     Field('discount_coupon',length=64,label=T('Discount Coupon'), readable=False,writable=False),
@@ -215,9 +214,7 @@ if ENABLE_BADGE:
     db.auth_user.badge_line2.readable = True
     db.auth_user.badge_line1.writable = True
     db.auth_user.badge_line2.writable = True
-    db.auth_user.sponsor_id.readable = True
-    db.auth_user.sponsor_id.writable = True
 
     db.auth_user.badge_line1.comment = T("(i.e. position)")
     db.auth_user.badge_line2.comment = T("(ie. interests)")
-    db.auth_user.sponsor_id.comment = T("(logo for badge)")
+

@@ -26,4 +26,11 @@ db.define_table( 'sponsor',
    migrate=migrate, fake_migrate=fake_migrate)
 
 # sponsor logo in badge:
-db.auth_user.sponsor_id.requires = IS_EMPTY_OR(IS_IN_DB(db, db.sponsor, '%(name)s'))
+auth.settings.extra_fields['auth_user'] = [
+    Field('sponsor_id',"reference sponsor", label=T('Sponsor'), 
+          readable=ENABLE_BADGE, writable=ENABLE_BADGE,
+          requires=IS_EMPTY_OR(IS_IN_DB(db, db.sponsor, '%(name)s')),
+          comment=T("(logo for badge)"),
+          )
+    ]
+
