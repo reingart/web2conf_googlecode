@@ -11,19 +11,89 @@ $(function()
 </script>
 {{pass}}
 
+{{if not auth.is_logged_in():}}
 <div class="alert">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
     <h3>{{=T("%s days left") % (response.days_left,)}} 
     {{=A(T("%s registrations so far") % (response.reg_count,), _href=URL(c='stats', f='attendees'), _style='text-decoration: none;')}}<br/>
     <!--i>{{=A(T("full schedule (reserve your seat!)"), _href=URL(c='schedule', f='index'), _style='text-decoration: none;')}}</i></h3-->
 </div>
+{{pass}}
 
-<div class="jumbotron">
-    <h1>May 20-22 Posadas, Misiones, Argentina</h1>
-    <p class="lead">{{=T("SciPy Latin América 2015, the third annual Scientific Computing with Python conference, will be held this May 20-22 in Posadas Misiones Argentina. SciPy is a community dedicated to the advancement of scientific computing through open source Python software for mathematics, science, and engineering.")}}</p>
-    <a class="btn btn-large btn-success" href="{{=URL(c="user", f="register")}}">Register Now</a>
+<div>
+
+    <div class="jumbotron">
+        <h1>May 20-22 Posadas, Misiones, Argentina</h1>
+        <p class="lead center">
+            {{=T("SciPy Latin América 2015, the third annual Scientific Computing with Python conference, will be held this May 20-22 in Posadas Misiones Argentina. SciPy is a community dedicated to the advancement of scientific computing through open source Python software for mathematics, science, and engineering.")}}</p>
+    </div>
+    {{if not auth.is_logged_in():}}
+    <div class="center">
+        <a class="btn btn-large btn-success" href="{{=URL(c="user", f="register")}}">Register Now</a>
+    </div>
+    {{pass}}
+    <p class="lead center">
+       <a href="http://www.ugd.edu.ar/contacto" target="_blank">Conference Address</a>
+    </p>
+    
+    <div>
+        <h2>Venue</h2>
+        <p class="lead center">
+            Posadas is the capital city of the Argentine province of Misiones, located at
+            the south of the province, on the left-hand (eastern) shore of the
+            Paraná River, opposite Encarnación, Paraguay. The city has an area of 965 km²
+            and a population of 324,756, and the Greater Posadas area has a population
+            of over 351,000...
+            <a target="_blank" href="http://en.wikipedia.org/wiki/Posadas,_Misiones">
+                More
+            </a>
+        <p class="center">
+            <a target="_blank" href="https://www.youtube.com/watch?v=fqCL9H-gOjc&autoplay=1">
+                <img src="{{=URL('static','posadas.png')}}"><br/>
+            </a>
+        </p>
+    </div>
+    <div>
+        <iframe width="100%" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=-55.89756846427917%2C-27.37265336912212%2C-55.89345932006835%2C-27.370133295201356&amp;layer=mapnik&amp;marker=-27.371395721257233%2C-55.89551389217377" style="border: 1px solid black"></iframe><br/><small><a href="http://www.openstreetmap.org/?mlat=-27.37140&amp;mlon=-55.89551#map=18/-27.37139/-55.89551">Full Map</a></small>
+    </div>
+    <div>
+        <h2>Past Conferences</h2>
+        <div class="row center">
+            <div class="span4">
+                <a href="http://en.wikipedia.org/wiki/Bah%C3%ADa_Blanca" target="_blank">
+                    <figure>
+                        <img src="{{=URL('static','past', 'bahia.jpg')}}">
+                        <figcaption>Bahía Blanca - 2014</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <div class="span4">
+                <a href="http://www.scipyla.org/conf/2014/" target="_blank">
+                    <figure>
+                        <img src="{{=URL('static','past', '2014.jpg')}}">
+                        <figcaption>SciPyCon Argentina 2014</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <div class="span4">
+                <a href="http://en.wikipedia.org/wiki/Puerto_Madryn" target="_blank">
+                    <figure>
+                        <img src="{{=URL('static','past', 'madryn.jpg')}}">
+                        <figcaption>Puerto Madryn - 2013</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <div class="span4">
+                <a href="http://www.scipyla.org/conf/2013/" target="_blank">
+                    <figure>
+                        <img src="{{=URL('static','past', '2013.jpg')}}">
+                        <figcaption>SciPyCon Argentina 2013</figcaption>
+                    </figure>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 <div style="padding: 5px"></div>
 
