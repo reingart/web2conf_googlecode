@@ -9,41 +9,41 @@ if ENABLE_FINANCIAL_AID:
        # - email address => fa.person.email
        # Registration:
        # - registration type => fa.percon.attendee_type
-       db.Field( 'person', db.auth_user, default=auth.user_id, readable=True, writable=False),
-       db.Field('created_on','datetime',default=now, readable=False, writable=False),
-       db.Field('modified_on','datetime',default=now, readable=False, writable=False),
-       db.Field( 'registration_amount', 'boolean', default=False),
+       Field( 'person', db.auth_user, default=auth.user_id, readable=True, writable=False),
+       Field('created_on','datetime',default=now, readable=False, writable=False),
+       Field('modified_on','datetime',default=now, readable=False, writable=False),
+       Field( 'registration_amount', 'boolean', default=False),
        # Hotel Cost:
        # - number of nights of assitance requested;
-       db.Field( 'hotel_nights', 'integer', default=0 ),
+       Field( 'hotel_nights', 'integer', default=0 ),
        # - total amount requested; label:  "Max 50% of room rate at Crowne Plaza x # nights;" labeled; validated if easy to update room rates.
-       db.Field( 'total_lodging_amount', 'double', default='0.00'),
-       db.Field( 'roommates', 'string', length=128, default=''),
+       Field( 'total_lodging_amount', 'double', default='0.00'),
+       Field( 'roommates', 'string', length=128, default=''),
        # Transportation:
        # - method of transportation / details;
-       # db.Field( 'method_of_transportation', 'string', default=''),
-       db.Field( 'transportation_details', 'text', default=''),
+       # Field( 'method_of_transportation', 'string', default=''),
+       Field( 'transportation_details', 'text', default=''),
        # - total amount requested; label: "If you want assistance with your transportation costs, please provide a rough estimate (to nearest US$100)
        #       of how much a round-trip will cost.  Please update your request once final cost is known."
-       db.Field( 'transportation_amount', 'double', default='0.00', ),
+       Field( 'transportation_amount', 'double', default='0.00', ),
        # Total:  - read-only field calculated from above 3 sections
        # - registration dollar amount requested; (let applicant specify, as they can ask for just a portion)
-       db.Field( 'total_amount_requested', 'double', default='0.0'), # default = ATTENDEE_TYPE_COST[person.attendee_type]),
+       Field( 'total_amount_requested', 'double', default='0.0'), # default = ATTENDEE_TYPE_COST[person.attendee_type]),
        #
        # Additional fileds:
        # - minimum at. requested; label "In addition to the desired amount, state the minimum amount of aid you require, below
        #  which you will not be able to attend PyCon.  If we are unable to allocate this minumum amount, we will decline your application
        #  and allocate the funds to others."
-       db.Field( 'minimum_amount_requested', 'double', default='0.00', ),
+       Field( 'minimum_amount_requested', 'double', default='0.00', ),
        # - Rational " State why you should come to PyCon, and what you will be doing.
        #    We don't need an essay, but please provide a few sentences of explanation.
        #   Priority will be given to people who make significant contributions to PyCon
        #   and the Python community (e.g. students working on a task, conference speakers,
        #   sprint leaders, developers critical to a sprint, super-enthusiastic sprint newbies
        #   who will give 110% for their project, or people doing public service work with Python)."
-       db.Field( 'rationale', 'text', default='' ),
-       db.Field('status',default='pending',label=T("Status"), writable=False,readable=False),
-       db.Field( 'grant_amount', 'double', default='0.00', writable=False,readable=False),
+       Field( 'rationale', 'text', default='' ),
+       Field('status',default='pending',label=T("Status"), writable=False,readable=False),
+       Field( 'grant_amount', 'double', default='0.00', writable=False,readable=False),
        migrate=migrate, fake_migrate=fake_migrate)
     
     db.fa.person.requires=IS_IN_DB(db,'auth_user.id','%(last_name)s, %(first_name)s [%(id)s]')

@@ -7,33 +7,33 @@
 autotranslate = lambda x: T(x) if not x in ("", None) else x
 
 db.define_table('activity',
-    db.Field('authors',label=T("Authors"),default=('%s %s' %(auth.user.first_name, auth.user.last_name)) if auth.user else None),
-    db.Field('title',label=T("Title")),
-    db.Field('type','text',label=T("Type")),
-    db.Field('code', readable=False, writable=False,),
-    db.Field('duration','integer',label=T("Duration in minutes")), # era 45 min
-    db.Field('request_time_extension', 'boolean', readable=False, writable=False, default=False, label=T("Time extension"), comment=T("(explain why)")),
-    db.Field('cc',label=T("cc"), length=512, default="", readable=False, writable=False),
-    db.Field('abstract','text',label=T("Abstract")),
-    db.Field('description','text',label=T("Description"),widget=wysiwyg),
-    db.Field('categories','list:string',label=T("Categories")),
-    db.Field('level','string',label=T("Level"),represent=autotranslate),
-    db.Field('track','string',label=T("Track"),represent=autotranslate),
-    db.Field('logo','upload', comment=T("only used for sprints)")),
-    db.Field('scheduled_datetime','datetime',label=T("Scheduled Datetime"),writable=False,readable=False),
-    db.Field('scheduled_room',label=T("Scheduled Room"),requires=IS_EMPTY_OR(IS_IN_SET(sorted(ACTIVITY_ROOMS.items()))), writable=False,readable=False),
-    db.Field('status',default='pending',label=T("Status"),writable=False,readable=False),
-    db.Field('confirmed','boolean',default=False,writable=False,readable=False),
-    db.Field('video',length=128,label=T('Video'),default='',writable=False,readable=False),
-    db.Field('score','double',label=T("Score"),default=None,readable=False,writable=False),
-    db.Field('created_by',db.auth_user,label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
-    db.Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
-    db.Field('created_signature',label=T("Created Signature"),readable=False,writable=False,
+    Field('authors',label=T("Authors"),default=('%s %s' %(auth.user.first_name, auth.user.last_name)) if auth.user else None),
+    Field('title',label=T("Title")),
+    Field('type','text',label=T("Type")),
+    Field('code', readable=False, writable=False,),
+    Field('duration','integer',label=T("Duration in minutes")), # era 45 min
+    Field('request_time_extension', 'boolean', readable=False, writable=False, default=False, label=T("Time extension"), comment=T("(explain why)")),
+    Field('cc',label=T("cc"), length=512, default="", readable=False, writable=False),
+    Field('abstract','text',label=T("Abstract")),
+    Field('description','text',label=T("Description"),widget=wysiwyg),
+    Field('categories','list:string',label=T("Categories")),
+    Field('level','string',label=T("Level"),represent=autotranslate),
+    Field('track','string',label=T("Track"),represent=autotranslate),
+    Field('logo','upload', comment=T("only used for sprints)")),
+    Field('scheduled_datetime','datetime',label=T("Scheduled Datetime"),writable=False,readable=False),
+    Field('scheduled_room',label=T("Scheduled Room"),requires=IS_EMPTY_OR(IS_IN_SET(sorted(ACTIVITY_ROOMS.items()))), writable=False,readable=False),
+    Field('status',default='pending',label=T("Status"),writable=False,readable=False),
+    Field('confirmed','boolean',default=False,writable=False,readable=False),
+    Field('video',length=128,label=T('Video'),default='',writable=False,readable=False),
+    Field('score','double',label=T("Score"),default=None,readable=False,writable=False),
+    Field('created_by',db.auth_user,label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
+    Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
+    Field('created_signature',label=T("Created Signature"),readable=False,writable=False,
              default=('%s %s' % (auth.user.first_name,auth.user.last_name)) if auth.user else ''),
-    db.Field('modified_by','integer',label=T("Modified By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
-    db.Field('modified_on','datetime',label=T("Modified On"),readable=False,writable=False,default=request.now,update=request.now),
-    db.Field('notes', 'text', comment=T("Additional remarks"), label=T("Notes")),
-    db.Field('license', 'string', default="CC BY-SA, Atribución - Compartir derivadas de la misma forma.", label=T("License")),
+    Field('modified_by','integer',label=T("Modified By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
+    Field('modified_on','datetime',label=T("Modified On"),readable=False,writable=False,default=request.now,update=request.now),
+    Field('notes', 'text', comment=T("Additional remarks"), label=T("Notes")),
+    Field('license', 'string', default="CC BY-SA, Atribución - Compartir derivadas de la misma forma.", label=T("License")),
     format='%(title)s',
     migrate=migrate, fake_migrate=fake_migrate)
 
@@ -78,18 +78,18 @@ db.activity.duration.represent=lambda activity_duration: activity_duration and (
 
 db.activity.notes.default = "Tipo de público: \nConocimientos previos: \nRequisitos Especiales: (hardware, materiales, ayuda financiera)"
 
-db.define_table('activity_archived',db.activity,db.Field('activity_proposal',db.activity),
+db.define_table('activity_archived',db.activity,Field('activity_proposal',db.activity),
                 migrate=migrate, fake_migrate=fake_migrate)
 
 db.define_table('attachment',
-   db.Field('activity_id',db.activity,label=T('ACTIVITY'),writable=False),
-   db.Field('name','string',label=T('Name')),
-   db.Field('description','text',label=T('Description')),
-   db.Field('file','upload',label=T('File')),
-   db.Field('file_data','blob',default=''),
-   db.Field('filename'),
-   db.Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
-   db.Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
+   Field('activity_id',db.activity,label=T('ACTIVITY'),writable=False),
+   Field('name','string',label=T('Name')),
+   Field('description','text',label=T('Description')),
+   Field('file','upload',label=T('File')),
+   Field('file_data','blob',default=''),
+   Field('filename'),
+   Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
+   Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
    migrate=migrate, fake_migrate=fake_migrate)
 db.attachment.name.requires=IS_NOT_EMPTY()
 db.attachment.file.requires=IS_NOT_EMPTY()
@@ -97,32 +97,32 @@ db.attachment.filename.requires=IS_NOT_EMPTY()
 db.attachment.filename.comment=T("(new filename for downloads)")
 
 db.define_table('comment',
-   db.Field('activity_id',db.activity,label=T('ACTIVITY'),writable=False),
-   db.Field('body','text',label=T('Body')),
-   db.Field('created_signature',label=T("Created Signature"),readable=False,writable=False,
+   Field('activity_id',db.activity,label=T('ACTIVITY'),writable=False),
+   Field('body','text',label=T('Body')),
+   Field('created_signature',label=T("Created Signature"),readable=False,writable=False,
              default=('%s %s' % (auth.user.first_name,auth.user.last_name)) if auth.user else ''),
-   db.Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
-   db.Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
+   Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
+   Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
    migrate=migrate, fake_migrate=fake_migrate)
 db.comment.body.requires=IS_NOT_EMPTY()
 
 db.define_table('review',
-   db.Field('activity_id',db.activity,label=T('ACTIVITY'),writable=False),
-   db.Field('rating','integer',label=T('Rating'),default=0),
-   db.Field('body','text',label=T('Body'),comment="Mensaje opcional para el autor / organizadores"),
-   db.Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
-   db.Field('created_signature',label=T("Created Signature"),readable=False,writable=False,
+   Field('activity_id',db.activity,label=T('ACTIVITY'),writable=False),
+   Field('rating','integer',label=T('Rating'),default=0),
+   Field('body','text',label=T('Body'),comment="Mensaje opcional para el autor / organizadores"),
+   Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
+   Field('created_signature',label=T("Created Signature"),readable=False,writable=False,
              default=('%s %s' % (auth.user.first_name,auth.user.last_name)) if auth.user else ''),
-   db.Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
+   Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
    migrate=migrate, fake_migrate=fake_migrate)
 #db.review.body.requires=IS_NOT_EMPTY()
 db.review.rating.requires=IS_IN_SET([x for x in range(0,6)])
 
 db.define_table('author',
-    db.Field('user_id', db.auth_user),
-    db.Field('activity_id', db.activity),
-    db.Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
-    db.Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
+    Field('user_id', db.auth_user),
+    Field('activity_id', db.activity),
+    Field('created_by','integer',label=T("Created By"),readable=False,writable=False,default=auth.user.id if auth.user else 0),
+    Field('created_on','datetime',label=T("Created On"),readable=False,writable=False,default=request.now),
     migrate=migrate, fake_migrate=fake_migrate)
 
 def user_is_author(activity_id=None):

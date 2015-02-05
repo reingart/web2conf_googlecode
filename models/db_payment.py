@@ -10,15 +10,15 @@ if ENABLE_PAYMENTS:
     ######################################
 
     db.define_table('payment',
-       db.Field('from_person', db.auth_user, default=auth.user_id),
-       db.Field('rate', length=64),
-       db.Field('method',default='dineromail'),
-       db.Field('amount','double',default=0.0),
-       db.Field('order_id',length=64),
-       db.Field('status',length=64),
-       db.Field('invoice','text'),
-       db.Field('created_on','datetime',default=now),
-       db.Field('modified_on','datetime',default=now),
+       Field('from_person', db.auth_user, default=auth.user_id),
+       Field('rate', length=64),
+       Field('method',default='dineromail'),
+       Field('amount','double',default=0.0),
+       Field('order_id',length=64),
+       Field('status',length=64),
+       Field('invoice','text'),
+       Field('created_on','datetime',default=now),
+       Field('modified_on','datetime',default=now),
         migrate=migrate)
 
     db.payment.from_person.requires=IS_IN_DB(db,'auth_user.id','%(first_name)s %(last_name)s [%(id)s]')
