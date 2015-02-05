@@ -3,7 +3,7 @@
 # set user selected language (default spanish)
 
 if request.vars.lang: session.lang=request.vars.lang
-T.force(session.lang or "es")
+T.force(session.lang or "en")
 
 # Return service unavailable
 # for maintenance
@@ -48,10 +48,9 @@ else:
 
 TWITTER_HASH = "pyconar"
 
-response.title=T('web2conf')
+response.title=T('SciPy Latin America 2015')
 response.subtitle=''
-response.footer=T("""Conference description<b>dates</b> city (organized by <a href="#">users group</a>). <br/>
-More info: <a href="#">blog</a>&nbsp; Contact: <a href="#">mail address</a>""")
+response.footer=T("""Python Scientific Conference""")
 response.keywords='python, free software'
 response.description=T('Powered by web2py')
 
@@ -82,13 +81,13 @@ T_SHIRT_SIZES_LABELS=(T('no, thanks'),    T("small"),T("medium"),T("large"),T("x
 # NOTE: we add 6 hours since our server is EST, and this will cover Hawaii
 #  will want to have these times be session time local in next rev.
 TODAY_DATE=datetime.datetime.today()
-PROPOSALS_DEADLINE_DATE=datetime.datetime(2013,10,19,23,59,59)
-REVIEW_DEADLINE_DATE=datetime.datetime(2013,7,29,23,59,59)
-EARLYBIRD_DATE=datetime.datetime(2013,10,12,23,59,0)
-PRECONF_DATE=datetime.datetime(2013,11,2,23,59,0)
-FACUTOFF_DATE=datetime.datetime(2013,9,30,23,59,0)
-REGCLOSE_DATE=datetime.datetime(2013,11,18,23,59,59)
-CONFERENCE_DATE=datetime.datetime(2013,10,24,8,00,00)
+PROPOSALS_DEADLINE_DATE=datetime.datetime(2015,2,28,23,59,59)
+REVIEW_DEADLINE_DATE=datetime.datetime(2015,3,31,23,59,59)
+EARLYBIRD_DATE=datetime.datetime(2015,2,28,23,59,0)
+PRECONF_DATE=datetime.datetime(2015,3,31,23,59,0)
+FACUTOFF_DATE=datetime.datetime(2015,4,30,23,59,0)
+REGCLOSE_DATE=datetime.datetime(2015,5,15,23,59,59)
+CONFERENCE_DATE=datetime.datetime(2015,5,20,8,0,0)
 
 SIMPLIFIED_REGISTRATION=False # don't ask password on registration
 
@@ -164,16 +163,16 @@ ACTIVITY_SHOW_DESCRIPTION = False # hide desc to public
 ACTIVITY_BACKUP_TO = "pyconar2013@gmail.com"
 
 PROPOSALS_DEADLINE_DATE_PER_ACTIVITY_TYPE={
-    'talk': datetime.datetime(2013,6,30,23,59,59),
-    'extreme talk': datetime.datetime(2013,6,30,23,59,59),
-    'tutorial': datetime.datetime(2013,6,30,23,59,59),
-    'keynote': datetime.datetime(2013,9,12,0,0,0),
-    'plenary': datetime.datetime(2013,9,12,0,0,0),
-    'poster': datetime.datetime(2013,10,19,23,59,59),
-    'paper': datetime.datetime(2013,9,12,0,0,0),
-    'project': datetime.datetime(2013,10,12,0,0,0),
-    'stand': datetime.datetime(2013,10,12,0,0,0),
-    'sprint': datetime.datetime(2013,10,12,0,0,0),
+    'talk': datetime.datetime(2015,4,30,23,59,59),
+    'extreme talk': datetime.datetime(2015,4,30,23,59,59),
+    'tutorial': datetime.datetime(2015,4,30,23,59,59),
+    'keynote': datetime.datetime(2015,4,12,0,0,0),
+    'plenary': datetime.datetime(2015,4,12,0,0,0),
+    'poster': datetime.datetime(2015,4,19,23,59,59),
+    'paper': datetime.datetime(2015,4,12,0,0,0),
+    'project': datetime.datetime(2015,4,12,0,0,0),
+    'stand': datetime.datetime(2015,4,12,0,0,0),
+    'sprint': datetime.datetime(2015,4,12,0,0,0),
     }
 
 ON_PROPOSE_EMAIL = "edvm@fedoraproject.org" #email address list, separated by ";"
@@ -222,9 +221,9 @@ JANRAIN = False
 # modules
 ENABLE_TALKS=True
 ENABLE_EXPENSES = False
-ENABLE_FINANCIAL_AID = True
-ENABLE_PAYMENTS = True
-ENABLE_BADGE = True
+ENABLE_FINANCIAL_AID = False
+ENABLE_PAYMENTS = False
+ENABLE_BADGE = False
 
 if DEV_TEST:    # for local development
     HOST='localhost:8000'
