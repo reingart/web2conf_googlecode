@@ -50,7 +50,7 @@ TWITTER_HASH = ""
 
 response.title=T('SciPy Latin America 2015')
 response.subtitle=''
-response.footer=T("""Python Scientific Conference""")
+response.footer=T("""Python Scientific Conference 2015 Misiones, Argentina""")
 response.keywords='python, free software'
 response.description=T('Powered by web2py')
 

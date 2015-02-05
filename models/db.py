@@ -23,7 +23,7 @@ PAST=datetime.datetime.today()-datetime.timedelta(minutes=1)
 #### end cleanup sessions
 
 def wysiwyg(field,value):
-    return DIV(field.name,TEXTAREA(_name=field.name, _cols="60", value=value, 
+    return DIV(field.name,TEXTAREA(_name=field.name, _cols="60", value=value,
                                    _id="wysiwyg",
                                    _style="width: 810px; height: 200px;"))
 
@@ -48,15 +48,15 @@ db.define_table('auth_user',
     Field('country',label=T('Country'),default='Argentina'),
     Field('zip_code',label=T('Zip/Postal Code'),default=''),    
     Field('phone_number',label=T('Phone Number'),comment=T('(cellphone)')),
-    Field('include_in_delegate_listing','boolean',default=True,label=T('Include in Delegates List')),
-    Field('sponsors','boolean',default=True,label=T('Contacto con Auspiciantes'),readable=True,writable=True),
+    Field('include_in_delegate_listing','boolean',default=True,label=T('Include in Delegates List'),readable=False,writable=False),
+    Field('sponsors','boolean',default=True,label=T('Contacto con Auspiciantes'),readable=False,writable=False),
     Field('twitter_username',length=64,label=T('Twitter username'),default=''),
     Field('personal_home_page',length=128,label=T('Personal Home Page'),default=''),
     Field('company_name',label=T('Entity Name'),default=''),
     Field('company_home_page',length=128,label=T('Entity Home Page'),default=''),
     Field('badge_line1',label=T('Badge Line 1'),default='',readable=False,writable=False),
     Field('badge_line2',label=T('Badge Line 2'),default='',readable=False,writable=False),
-    Field('t_shirt_size',label=T('T-shirt Size')),
+    Field('t_shirt_size',label=T('T-shirt Size'),readable=False,writable=False),
     Field('attendee_type',label=T('Registration Type'),default=ATTENDEE_TYPES[0][0],readable=False,writable=False),
     Field('discount_coupon',length=64,label=T('Discount Coupon'), readable=False,writable=False),
     Field('donation','double',default=0.0,label=T('Donation to PyAr'),readable=False,writable=False),
@@ -210,11 +210,10 @@ db.auth_user.confirmed.label = T("Confirm attendance")
 
 # badge:
 if ENABLE_BADGE:
-    db.auth_user.badge_line1.readable = True
-    db.auth_user.badge_line2.readable = True
-    db.auth_user.badge_line1.writable = True
-    db.auth_user.badge_line2.writable = True
+    db.auth_user.badge_line1.readable = False
+    db.auth_user.badge_line2.readable = False
+    db.auth_user.badge_line1.writable = False
+    db.auth_user.badge_line2.writable = False
 
     db.auth_user.badge_line1.comment = T("(i.e. position)")
     db.auth_user.badge_line2.comment = T("(ie. interests)")
-
