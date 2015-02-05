@@ -21,7 +21,7 @@ $(function()
 <div class="jumbotron">
     <h1>May 20-22 Posadas, Misiones, Argentina</h1>
     <p class="lead">{{=T("SciPy Latin América 2015, the third annual Scientific Computing with Python conference, will be held this May 20-22 in Posadas Misiones Argentina. SciPy is a community dedicated to the advancement of scientific computing through open source Python software for mathematics, science, and engineering.")}}</p>
-    <a class="btn btn-large btn-success" href="{{=URL(c="user", f="register")}}">Inscribite hoy!</a>
+    <a class="btn btn-large btn-success" href="{{=URL(c="user", f="register")}}">Register Now</a>
 </div>
 
 
@@ -38,19 +38,21 @@ $(function()
 {{pass}}
 
 <div class="row-fluid">
+    {{if False and TWITTER_HASH:}}
     <div class="span6">
         {{# the custom twitter timeline is broken }}
-        {{if True or TWITTER_HASH:}}
             <!-- <h3><img src={{=URL(c="static", f="img/twitter.png")}} alt="twitter"/> {{=T("%s Recent Tweets"%TWITTER_HASH)}} &nbsp;
             <a href="https://twitter.com/scipyconar" class="twitter-follow-button" data-show-count="false" data-lang="es">Seguir a @scipyconar</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></h3> -->
                 {{# LOAD(c="default", f="twitter.load", ajax=True) }}
-        {{pass}}
 		  <a class="twitter-timeline"  href="https://twitter.com/scipyconar"  data-widget-id="347683218054586368">Tweets de @scipyconar</a>
           <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </div>
+    {{pass}}
+    {{if False:}}
     <div class="span6">
         <div id="news">
           {{=LOAD(c="default", f="planet.load", ajax=True) }}
         </div>
     </div>
+    {{pass}}
 </div>

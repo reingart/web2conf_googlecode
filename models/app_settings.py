@@ -46,7 +46,7 @@ else:
     DBURI=None
     DBPOOLS=0
 
-TWITTER_HASH = "pyconar"
+TWITTER_HASH = ""
 
 response.title=T('SciPy Latin America 2015')
 response.subtitle=''
@@ -160,7 +160,7 @@ ACTIVITY_VENUE=SPAN(A("Main Venue \"Downtown\"", _href=URL(c="venue")))
 
 ACTIVITY_SHOW_DESCRIPTION = False # hide desc to public
 
-ACTIVITY_BACKUP_TO = "pyconar2013@gmail.com"
+ACTIVITY_BACKUP_TO = "jbc.develop@gmail.com"
 
 PROPOSALS_DEADLINE_DATE_PER_ACTIVITY_TYPE={
     'talk': datetime.datetime(2015,4,30,23,59,59),
@@ -175,7 +175,7 @@ PROPOSALS_DEADLINE_DATE_PER_ACTIVITY_TYPE={
     'sprint': datetime.datetime(2015,4,12,0,0,0),
     }
 
-ON_PROPOSE_EMAIL = "edvm@fedoraproject.org" #email address list, separated by ";"
+ON_PROPOSE_EMAIL = "jbc.develop@gmail.com" #email address list, separated by ";"
 PROPOSE_NOTIFY_TEXT = str(T("""Your activity proposal %(activity)s has been recorded.
 You can access the current activity information at %(link)s
 Thank you"""))
@@ -196,7 +196,7 @@ SPONSOR_LEVELS=("Organizer", "Gold", "Silver", "Bronx", "Specials Thanks", "Medi
 EMAIL_VERIFICATION= not DEV_TEST
 EMAIL_SERVER='localhost:25' #or Configure!
 EMAIL_AUTH=None # or 'username:password'
-EMAIL_SENDER='pyconar2013@gmail.com'
+EMAIL_SENDER='jbc.develop@gmail.com'
 
 # on production, mail should be sent by a cron job or similar
 # (really, avoid timeout issues and problems like google spam filtering)
